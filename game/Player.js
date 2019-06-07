@@ -12,8 +12,9 @@ class Player{
 }
 
 class Arrow{
-	constructor(x, y){
+	constructor(x, y, d = 10){
 		this.pos = createVector(player.pos.x, player.pos.y);
+		this.dmt = d;
 		this.heading = createVector(x, y);
 		this.finalVector = createVector(0, 0);
 		this.origin = createVector(0, 0);
@@ -28,7 +29,7 @@ class Arrow{
 	}
 
 	show(){
-		circle(this.pos.x, this.pos.y, 10);
+		circle(this.pos.x, this.pos.y, this.dmt);
 	}
 
 	shoot(o){

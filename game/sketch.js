@@ -7,8 +7,8 @@ duration = 0;
 function setup() {
 	createCanvas(800, 600);
 	player = new Player(width/2, height*2/3);
-	spawnPoints.push(new SpawnPoint(50, 50, 1, 2));
-	spawnPoints.push(new SpawnPoint(width - 50, height - 50, 1, 2));
+	spawnPoints.push(new SpawnPoint(50, 50, 3, 3));
+	spawnPoints.push(new SpawnPoint(width - 50, height - 50, 3, 3));
 }
 
 function draw() {
@@ -62,6 +62,7 @@ function detectCollisions(){
 		let itHits = false;
 		for(let e = 0; e < enemies.length; e++){
 			if(circleRectCollision(arrows[a], enemies[e])){
+			
 				arrows.splice(a, 1);
 				enemies.splice(e, 1);
 				itHits = true;
@@ -76,7 +77,7 @@ function detectCollisions(){
 	for(let e = 0; e < enemies.length; e++){
 		if(circleRectCollision(player, enemies[e])){
 			noLoop();
-			console.log("wtf");
+			console.log("Game Over");
 		}
 	}
 }
@@ -97,5 +98,5 @@ function circleRectCollision(c, r){
 	let distY = c.pos.y - testY;
 	let distance = sqrt((distX * distX) + (distY * distY));
 	// Retorna V ou F se intersectar
-	return (distance <= r.dmt / 2);
+	return (distance <= c.dmt / 2);
 }
