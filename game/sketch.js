@@ -1,6 +1,7 @@
 let player;
 let enemies = [];
 let arrows=[];
+duration = 0;
 
 function setup() {
 	createCanvas(800, 600);
@@ -12,8 +13,9 @@ function draw() {
 	keyboard();
 	detectCollisions();
 	updateElements();
-	if(millis()/1000>enemies.length){
-		enemies.push(new Enemy(random(width), 0, 5));
+	if(millis()/1000>duration){
+		enemies.push(new Enemy(random(width), 0, 2));
+		duration++;
 	}
 }
 
