@@ -7,7 +7,8 @@ duration = 0;
 function setup() {
 	createCanvas(800, 600);
 	player = new Player(width/2, height*2/3);
-	spawnPoints.push(new SpawnPoint(50, 50, 3, 2));
+	spawnPoints.push(new SpawnPoint(50, 50, 1, 2));
+	spawnPoints.push(new SpawnPoint(width - 50, height - 50, 1, 2));
 }
 
 function draw() {
@@ -56,6 +57,7 @@ function updateScreen(){
 }
 
 function detectCollisions(){
+	//Testa se a flecha acerta o alvo
 	for(let a = 0; a < arrows.length; a++){
 		let itHits = false;
 		for(let e = 0; e < enemies.length; e++){
@@ -68,6 +70,13 @@ function detectCollisions(){
 			if(itHits){
 				break;
 			}
+		}
+	}
+	//testa se o inimigo alcança o player
+	for(let e = 0; e < enemies.length; e++){
+		if(circleRectCollision(player, enemies[e])){
+			noLoop();
+			console.log("wtf");
 		}
 	}
 }
