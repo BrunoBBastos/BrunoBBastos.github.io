@@ -3,6 +3,7 @@ class Enemy{
 		this.pos = createVector(x, y);
 		this.vel = v;
 		this.dmt = d;
+		this.life = 1;
 	}
 
 	update(){
