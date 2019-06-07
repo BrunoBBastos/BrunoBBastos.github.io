@@ -15,10 +15,7 @@ function draw() {
 	keyboard();
 	detectCollisions();
 	updateElements();
-	// if(millis()/1000>duration){
-	// 	enemies.push(new Enemy(random(width), 0, 2));
-	// 	duration++;
-	// }
+	
 }
 
 function updateElements(){
