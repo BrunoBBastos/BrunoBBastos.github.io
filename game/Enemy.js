@@ -19,10 +19,23 @@ class Enemy{
 		rect(this.pos.x, this.pos.y, this.dmt, this.dmt*3/2);
 	}
 
-
 	chooseDirection(){
 		let objective = player.pos.copy();
 		this.direction = objective.sub(this.pos);
 		this.direction.setMag(this.vel);
+	}
+}
+
+class SpawnPoint{
+	constructor(x, y, n, t){
+		this.pos = createVector(x, y);
+		this.num = n;
+		this.interval = setInterval(this.spawnEnemies.bind(this), t*1000);
+	}
+
+	spawnEnemies(){
+		for(let i = 0; i< this.num; i ++){
+			enemies.push(new Enemy(this.pos.x, this.pos.y, 2));
+		}
 	}
 }

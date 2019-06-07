@@ -1,11 +1,13 @@
 let player;
 let enemies = [];
 let arrows=[];
+let spawnPoints = [];
 duration = 0;
 
 function setup() {
 	createCanvas(800, 600);
 	player = new Player(width/2, height*2/3);
+	spawnPoints.push(new SpawnPoint(50, 50, 3, 2));
 }
 
 function draw() {
@@ -13,16 +15,19 @@ function draw() {
 	keyboard();
 	detectCollisions();
 	updateElements();
-	if(millis()/1000>duration){
-		enemies.push(new Enemy(random(width), 0, 2));
-		duration++;
-	}
+	// if(millis()/1000>duration){
+	// 	enemies.push(new Enemy(random(width), 0, 2));
+	// 	duration++;
+	// }
 }
 
 function updateElements(){
-	for(let a of arrows){
-		if(a.wasShot){
-			a.update();
+	for(let a = 0; a < arrows.length; a++){
+		if(arrows[a].wasShot){
+			arrows[a].update();
+			if(arrows[a].pos.x<arrows[a].dmt || arrows[a].pos.x>width+arrows[a].dmt ||arrows[a].pos.y<arrows[a].dmt || arrows[a].pos.y>height+arrows[a].dmt){
+				arrows.splice(a, 1);
+			}
 		}
 	}
 
