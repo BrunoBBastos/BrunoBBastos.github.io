@@ -6,25 +6,24 @@ let enemyArrows = [];
 let spawnPoints = [];
 let coins = [];
 let score = 0;
+let highScore = 0;
 let level = 0;
-let levelDuration = 0;
+let levelDuration;
 let runtime = 0;
+let mode = 0;
+let cinInterval;
 
 
 function setup() {
 	createCanvas(800, 600);
-	player = new Player(width/2, height*2/3);
-	startGame();
 }
 
 function draw() {
-	updateScreen();
-	detectCollisions();
-	updateElements();
+	operationMode();
 }
 
 function updateElements(){
-	// gibMoney();
+	// Deleta flechas se passarem dos limites da tela
 	for(let a = 0; a < arrows.length; a++){
 		if(arrows[a].wasShot){
 			arrows[a].update();
@@ -33,7 +32,6 @@ function updateElements(){
 			}
 		}
 	}
-
 	for(let i = 0; i < enemyArrows.length; i++){
 		if(enemyArrows[i].wasShot){
 			enemyArrows[i].update();
@@ -55,26 +53,38 @@ function updateElements(){
 }
 
 function mousePressed(){
-	// Prepara flecha
-	arrows.push(new Arrow(mouseX, mouseY, player));
+	switch(mode){
+		case 0:
+		return;
+		break;
+
+		case 1:
+		
+		break;
+
+		case 3:
+		// Prepara flecha
+		arrows.push(new Arrow(mouseX, mouseY, player));
+		break;
+	}
 }
 
 function mouseReleased(){
-	// Atira flecha
-	let arrowOrigin = createVector(mouseX, mouseY);
-	arrows[arrows.length -1].shoot(arrowOrigin);
-}
+	switch(mode){
+		case 0:
+		return;
+		break;
 
-function updateScreen(){
-	background(180, 255, 220);
-	push();
-	textSize(22);
-	fill(255, 168, 18);
-	textStyle(BOLD);
-	textAlign(CENTER, CENTER);
-	textFont('Helvetica');
-	text(score, width/2, height/16);
-	pop();
+		case 1:
+		mode++;
+		break;
+
+		case 3:
+		// Atira flecha
+		let arrowOrigin = createVector(mouseX, mouseY);
+		arrows[arrows.length -1].shoot(arrowOrigin);
+		break;
+	}
 }
 
 function detectCollisions(){
@@ -97,16 +107,19 @@ function detectCollisions(){
 	// Testa se o player é atingido por setas inimigas
 	for(let a = 0; a < enemyArrows.length; a++){
 		if(circleCircleCollision(enemyArrows[a], player)){
-			noLoop();
+			
 			console.log("Game Over");
+			mode = 5;
 			break;
 		}
 	}
 	//testa se o inimigo alcança o player
 	for(let e = 0; e < enemies.length; e++){
 		if(circleRectCollision(player, enemies[e])){
-			noLoop();
+			// noLoop();
 			console.log("Game Over");
+			mode = 5;
+			break;
 		}
 	}
 	// Testa se o player recolhe as moedas

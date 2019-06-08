@@ -13,7 +13,7 @@ class Passives{
 function manageLevel(){
 	level++;
 	loadWaves();
-	setTimeout(manageLevel, runTime*1000);
+	levelDuration = setTimeout(manageLevel, runTime*1000);
 }
 
 function loadWaves(){
@@ -55,11 +55,152 @@ function loadWaves(){
 	}
 }
 
-function gibMoney(){
-	coins.push(new Passives(random(width), random(height)));
+function operationMode(){
+	
+	switch(mode){
+
+		case 0:
+		presentation();
+		break;
+
+		case 1:
+		menu();
+		break;
+
+		case 2:
+		initGame();
+		break;
+
+		case 3:
+		gameOn();
+		break;
+
+		case 4:
+		pauseGame();
+		break;
+
+		case 5:
+		noLoop();
+		// endGame();
+		break;
+	}
+}
+
+function presentation(){
+	if(millis() < 2000){
+		background(0);
+		push();
+		textSize(60);
+		fill(255);
+		textStyle(BOLD);
+		textAlign(CENTER, CENTER);
+		textFont('Helvetica');
+		text("Title", width/2, height/2);
+		pop();
+	}
+	else{
+		mode++;
+	}
+}
+
+function menu(){
+	background(0);
+	push();
+	textSize(48);
+	fill(130);
+	textStyle(BOLD);
+	textAlign(CENTER, CENTER);
+	textFont('Helvetica');
+	text("High Score: " + highScore, width/2, height/4);
+	text("Play", width/2, height/2);
+	textSize(28);
+	text("Controls: \n w, a, s, d \n click and drag to shoot", width/2, height*3/4);
+	pop();
+}
+
+function initGame(){
+	player = new Player(width/2, height/2);
+	startGame();
+	mode++;
+	
+}
+
+function gameOn(){
+	updateScreen();
+	detectCollisions();
+	updateElements();
 }
 
 function startGame(){
 	manageLevel();
-	setInterval(gibMoney, 5000);
+	coinInterval = setInterval(gibMoney, 5000);
+}
+
+function gibMoney(){
+	coins.push(new Passives(random(width), random(height)));
+}
+
+function updateScreen(){
+	background(180, 255, 220);
+	push();
+	textSize(22);
+	fill(255, 168, 18);
+	textStyle(BOLD);
+	textAlign(CENTER, CENTER);
+	textFont('Helvetica');
+	text(score, width/2, height/16);
+	pop();
+}
+
+function gameOver(){
+	if(highScore < score){
+		highScore = score;
+	}
+	score = 0;
+	mode = 1;
+	clearTimeout(levelDuration);
+	enemies.splice(0, enemies.length);
+	archers.splice(0, archers.length);
+	arrows.splice(0, arrows.length);
+	enemyArrows.splice(0, enemyArrows.length);
+	for(let s = 0; s < spawnPoints.length; s++){
+		clearTimeout(spawnPoints[s].interval);
+	}
+	spawnPoints.splice(0, spawnPoints.length);
+	clearTimeout(coinInterval);
+	coins.splice(0, coins.length);
+	level = 0;
+}
+
+function keyPressed(){
+	switch(mode){
+		case 0:
+		break;
+		// Menu
+		case 1:
+		break;
+		// Init
+		case 2:
+		break;
+		// GameOn
+		case 3:
+		if(keyCode === ESCAPE){
+			mode++;
+		}
+		break;
+		// Pause
+		case 4:
+		if(keyCode === ESCAPE){
+			mode--;
+		}
+		break;
+		// End Game
+		case 5:
+		if(keyCode === ESCAPE){
+			mode=1;
+			gameOver();
+			loop();
+		}
+		break;
+	}
 }

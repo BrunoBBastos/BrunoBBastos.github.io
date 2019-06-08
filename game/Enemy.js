@@ -9,9 +9,9 @@ class Enemy{
 		this.score = 1;
 	}
 
-behavior(){
-	this.update();
-}
+	behavior(){
+		this.update();
+	}
 
 	update(){
 		let seekForce = this.seek();
@@ -82,9 +82,9 @@ class Archer extends Enemy{
 	}
 
 	shoot(){
-enemyArrows.push(new Arrow(player.pos.x, player.pos.y, this));
-let arrowOrigin = createVector(this.pos.x, this.pos.y);
-enemyArrows[enemyArrows.length -1].shoot(arrowOrigin);
+		enemyArrows.push(new Arrow(player.pos.x, player.pos.y, this));
+		let arrowOrigin = createVector(this.pos.x, this.pos.y);
+		enemyArrows[enemyArrows.length -1].shoot(arrowOrigin);
 	}
 
 	show(){
@@ -114,8 +114,8 @@ class SpawnPoint{
 	}
 
 	resetInterval(){
-clearTimeout(this.interval);
-this.interval = setInterval(this.spawnEnemies.bind(this), this.period*1000, this.minions[0],this.minions[1], this.minions[2]);
+		clearTimeout(this.interval);
+		this.interval = setInterval(this.spawnEnemies.bind(this), this.period*1000, this.minions[0],this.minions[1], this.minions[2]);
 	}
 
 	addMinions(soldiersN, archersN, magesN){
