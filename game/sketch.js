@@ -4,6 +4,7 @@ let archers = [];
 let arrows=[];
 let enemyArrows = [];
 let spawnPoints = [];
+let score = 0;
 duration = 0;
 
 
@@ -65,6 +66,14 @@ function keyboard(){
 
 function updateScreen(){
 	background(180, 255, 220);
+push();
+textSize(22);
+fill(255, 168, 18);
+textStyle(BOLD);
+textAlign(CENTER, CENTER);
+textFont('Helvetica');
+text(score, width/2, height/16);
+pop();
 }
 
 function detectCollisions(){
@@ -73,7 +82,7 @@ function detectCollisions(){
 		let itHits = false;
 		for(let e = 0; e < enemies.length; e++){
 			if(circleRectCollision(arrows[a], enemies[e])){
-
+				score+= enemies[e].score;
 				arrows.splice(a, 1);
 				enemies.splice(e, 1);
 				itHits = true;
@@ -87,7 +96,7 @@ function detectCollisions(){
 
 	for(let a = 0; a < enemyArrows.length; a++){
 		if(circleCircleCollision(enemyArrows[a], player)){
-				noLoop();
+			noLoop();
 			console.log("Game Over");
 			break;
 		}
