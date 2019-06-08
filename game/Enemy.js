@@ -8,6 +8,10 @@ class Enemy{
 		this.life = 1;
 	}
 
+behavior(){
+	this.update();
+}
+
 	update(){
 		let seekForce = this.seek();
 		seekForce.setMag(this.vel);
@@ -52,7 +56,43 @@ class Enemy{
 		rect(this.pos.x, this.pos.y, this.dmt, this.dmt);
 	}
 }
+//////////////////////////////////////////////////////////////////
+class Archer extends Enemy{
+	constructor(x, y, v, d = 20){
+		super(x, y, v, d = 20);
+		this.sightRadius = 300;
+		this.lastTimeStamp = 0;
+		this.attackSpeed = 2000;
+	}
 
+	behavior(){
+		let distance = dist(this.pos.x, this.pos.y, player.pos.x, player.pos.y);
+		if(distance > this.sightRadius){
+			this.update();
+		}
+		else if((millis() - this.lastTimeStamp) > this.attackSpeed){
+			console.log("WTF");
+			this.shoot();
+			this.lastTimeStamp = millis();
+		}
+		else{
+			this.show();
+		}
+	}
+
+	shoot(){
+enemyArrows.push(new Arrow(player.pos.x, player.pos.y, this));
+let arrowOrigin = createVector(this.pos.x, this.pos.y);
+enemyArrows[enemyArrows.length -1].shoot(arrowOrigin);
+	}
+
+	show(){
+		fill('red');
+		rectMode(CENTER);
+		rect(this.pos.x, this.pos.y, this.dmt, this.dmt);
+	}
+
+}
 //////////////////////////////////////////////////////////////////
 class SpawnPoint{
 	constructor(x, y, n, t){
@@ -65,5 +105,6 @@ class SpawnPoint{
 		for(let i = 0; i< this.num; i ++){
 			enemies.push(new Enemy(this.pos.x+random(-5, 5), this.pos.y+ random(-5, 5), 1));
 		}
+		enemies.push(new Archer(this.pos.x+random(-5, 5), this.pos.y+ random(-5, 5), 1));
 	}
 }

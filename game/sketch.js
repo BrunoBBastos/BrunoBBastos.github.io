@@ -1,6 +1,8 @@
 let player;
 let enemies = [];
+let archers = [];
 let arrows=[];
+let enemyArrows = [];
 let spawnPoints = [];
 duration = 0;
 
@@ -8,9 +10,8 @@ duration = 0;
 function setup() {
 	createCanvas(800, 600);
 	player = new Player(width/2, height*2/3);
-	spawnPoints.push(new SpawnPoint(50, 50, 3, 3));
-	spawnPoints.push(new SpawnPoint(width - 50, height - 50, 3, 3));
- 
+	spawnPoints.push(new SpawnPoint(50, 50, 2, 5));
+	spawnPoints.push(new SpawnPoint(width - 50, height - 50, 2, 5));
 }
 
 function draw() {
@@ -18,7 +19,6 @@ function draw() {
 	keyboard();
 	detectCollisions();
 	updateElements();
-	
 }
 
 function updateElements(){
@@ -31,15 +31,24 @@ function updateElements(){
 		}
 	}
 
+	for(let i = 0; i < enemyArrows.length; i++){
+		if(enemyArrows[i].wasShot){
+			enemyArrows[i].update();
+			if(enemyArrows[i].pos.x<enemyArrows[i].dmt || enemyArrows[i].pos.x>width+enemyArrows[i].dmt ||enemyArrows[i].pos.y<enemyArrows[i].dmt || enemyArrows[i].pos.y>height+enemyArrows[i].dmt){
+				enemyArrows.splice(i, 1);
+			}
+		}
+	}
+
 	for(let e of enemies){
-		e.update();
+		e.behavior();
 	}
 
 	player.show(); // Player acima das flechas
 }
 
 function mousePressed(){
-	arrows.push(new Arrow(mouseX, mouseY));
+	arrows.push(new Arrow(mouseX, mouseY, player));
 }
 
 function mouseReleased(){
@@ -64,7 +73,7 @@ function detectCollisions(){
 		let itHits = false;
 		for(let e = 0; e < enemies.length; e++){
 			if(circleRectCollision(arrows[a], enemies[e])){
-			
+
 				arrows.splice(a, 1);
 				enemies.splice(e, 1);
 				itHits = true;
@@ -75,6 +84,15 @@ function detectCollisions(){
 			}
 		}
 	}
+
+	for(let a = 0; a < enemyArrows.length; a++){
+		if(circleCircleCollision(enemyArrows[a], player)){
+				noLoop();
+			console.log("Game Over");
+			break;
+		}
+	}
+
 	//testa se o inimigo alcança o player
 	for(let e = 0; e < enemies.length; e++){
 		if(circleRectCollision(player, enemies[e])){
@@ -101,5 +119,10 @@ function circleRectCollision(c, r){
 	let distance = sqrt((distX * distX) + (distY * distY));
 	// Retorna V ou F se intersectar
 	return (distance <= c.dmt / 2);
+}
+
+function circleCircleCollision(c, o){
+	return(dist(c.pos.x, c.pos.y, o.pos.x, o.pos.y) < c.dmt /2 + o.dmt/2);
+
 }
 

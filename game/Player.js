@@ -6,14 +6,21 @@ class Player{
 	}
 
 	show(){
+		this.edges();
 		fill(this.col.x, this.col.y, this.col.z);
 		circle(this.pos.x, this.pos.y, this.dmt);
+	}
+
+	edges(){
+		this.pos.x = constrain(this.pos.x, this.dmt/2, width - this.dmt/2);
+		this.pos.y = constrain(this.pos.y, this.dmt/2, height - this.dmt/2);
 	}
 }
 
 class Arrow{
-	constructor(x, y, d = 10){
-		this.pos = createVector(player.pos.x, player.pos.y);
+	constructor(x, y, s, d = 10){
+		this.shooter = s;
+		this.pos = createVector(this.shooter.pos.x, this.shooter.pos.y);
 		this.dmt = d;
 		this.heading = createVector(x, y);
 		this.finalVector = createVector(0, 0);
@@ -36,7 +43,12 @@ class Arrow{
 		this.origin = o;
 		this.heading = this.heading.sub(this.origin);
 		this.heading.setMag(7);
-		this.pos = player.pos.copy();
+		this.pos = this.shooter.pos.copy();
 		this.wasShot = true;
+	}
+
+	edges(){
+		this.pos.x = constrain(this.pos.x, this.dmt/2, width - this.dmt/2);
+		this.pos.y = constrain(this.pos.y, this.dmt/2, height - this.dmt/2);
 	}
 }
