@@ -107,9 +107,9 @@ function detectCollisions(){
 	// Testa se o player é atingido por setas inimigas
 	for(let a = 0; a < enemyArrows.length; a++){
 		if(circleCircleCollision(enemyArrows[a], player)){
-			// noLoop();
+			
 			console.log("Game Over");
-			gameOver();
+			mode = 5;
 			break;
 		}
 	}
@@ -118,7 +118,7 @@ function detectCollisions(){
 		if(circleRectCollision(player, enemies[e])){
 			// noLoop();
 			console.log("Game Over");
-			gameOver();
+			mode = 5;
 			break;
 		}
 	}

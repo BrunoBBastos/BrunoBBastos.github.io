@@ -76,13 +76,18 @@ function operationMode(){
 		break;
 
 		case 4:
+		pauseGame();
+		break;
+
+		case 5:
+		noLoop();
+		// endGame();
 		break;
 	}
 }
 
 function presentation(){
-
-	if(millis() < 1000){
+	if(millis() < 2000){
 		background(0);
 		push();
 		textSize(60);
@@ -107,7 +112,7 @@ function menu(){
 	textAlign(CENTER, CENTER);
 	textFont('Helvetica');
 	text("High Score: " + highScore, width/2, height/4);
-	text("New Game", width/2, height/2);
+	text("Play", width/2, height/2);
 	textSize(28);
 	text("Controls: \n w, a, s, d \n click and drag to shoot", width/2, height*3/4);
 	pop();
@@ -165,4 +170,37 @@ function gameOver(){
 	clearTimeout(coinInterval);
 	coins.splice(0, coins.length);
 	level = 0;
+}
+
+function keyPressed(){
+	switch(mode){
+		case 0:
+		break;
+		// Menu
+		case 1:
+		break;
+		// Init
+		case 2:
+		break;
+		// GameOn
+		case 3:
+		if(keyCode === ESCAPE){
+			mode++;
+		}
+		break;
+		// Pause
+		case 4:
+		if(keyCode === ESCAPE){
+			mode--;
+		}
+		break;
+		// End Game
+		case 5:
+		if(keyCode === ESCAPE){
+			mode=1;
+			gameOver();
+			loop();
+		}
+		break;
+	}
 }
