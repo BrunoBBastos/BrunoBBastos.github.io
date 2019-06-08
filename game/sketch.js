@@ -78,8 +78,8 @@ function detectCollisions(){
 	//testa se o inimigo alcança o player
 	for(let e = 0; e < enemies.length; e++){
 		if(circleRectCollision(player, enemies[e])){
-			//noLoop();
-			// console.log("Game Over");
+			noLoop();
+			console.log("Game Over");
 		}
 	}
 }
