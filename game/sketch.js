@@ -4,11 +4,13 @@ let arrows=[];
 let spawnPoints = [];
 duration = 0;
 
+
 function setup() {
 	createCanvas(800, 600);
 	player = new Player(width/2, height*2/3);
 	spawnPoints.push(new SpawnPoint(50, 50, 3, 3));
 	spawnPoints.push(new SpawnPoint(width - 50, height - 50, 3, 3));
+ 
 }
 
 function draw() {
@@ -76,8 +78,8 @@ function detectCollisions(){
 	//testa se o inimigo alcança o player
 	for(let e = 0; e < enemies.length; e++){
 		if(circleRectCollision(player, enemies[e])){
-			noLoop();
-			console.log("Game Over");
+			//noLoop();
+			// console.log("Game Over");
 		}
 	}
 }
@@ -100,3 +102,4 @@ function circleRectCollision(c, r){
 	// Retorna V ou F se intersectar
 	return (distance <= c.dmt / 2);
 }
+
