@@ -9,9 +9,9 @@ class Enemy{
 		this.score = 1;
 	}
 
-behavior(){
-	this.update();
-}
+	behavior(){
+		this.update();
+	}
 
 	update(){
 		let seekForce = this.seek();
@@ -82,9 +82,9 @@ class Archer extends Enemy{
 	}
 
 	shoot(){
-enemyArrows.push(new Arrow(player.pos.x, player.pos.y, this));
-let arrowOrigin = createVector(this.pos.x, this.pos.y);
-enemyArrows[enemyArrows.length -1].shoot(arrowOrigin);
+		enemyArrows.push(new Arrow(player.pos.x, player.pos.y, this));
+		let arrowOrigin = createVector(this.pos.x, this.pos.y);
+		enemyArrows[enemyArrows.length -1].shoot(arrowOrigin);
 	}
 
 	show(){
@@ -96,17 +96,31 @@ enemyArrows[enemyArrows.length -1].shoot(arrowOrigin);
 }
 //////////////////////////////////////////////////////////////////
 class SpawnPoint{
-	constructor(x, y, n, t){
+	constructor(x, y, t, s, a, m){
 		this.pos = createVector(x, y);
-		this.num = n;
-		this.interval = setInterval(this.spawnEnemies.bind(this), t*1000);
-		this.spawnEnemies();
+		this.minions = [s, a, m];
+		this.period = t;
+		this.interval = setInterval(this.spawnEnemies.bind(this), t*1000, this.minions[0],this.minions[1], this.minions[2]);
+		this.spawnEnemies(this.minions[0],this.minions[1], this.minions[2]);
 	}
 
-	spawnEnemies(){
-		for(let i = 0; i< this.num; i ++){
-			enemies.push(new Enemy(this.pos.x+random(-5, 5), this.pos.y+ random(-5, 5), 1));
+	spawnEnemies(soldiersN, archersN, magesN){
+		for(let s = 0; s < soldiersN; s++){
+			enemies.push(new Enemy(this.pos.x+random(-10, 10), this.pos.y+ random(-10, 10), 1));
 		}
-		enemies.push(new Archer(this.pos.x+random(-5, 5), this.pos.y+ random(-5, 5), 1));
+		for(let a = 0; a < archersN; a++){
+			enemies.push(new Archer(this.pos.x+random(-10, 10), this.pos.y+ random(-10, 10), 1));
+		}
 	}
-}
+
+	resetInterval(){
+clearTimeout(this.interval);
+this.interval = setInterval(this.spawnEnemies.bind(this), this.period*1000, this.minions[0],this.minions[1], this.minions[2]);
+	}
+
+	addMinions(soldiersN, archersN, magesN){
+		this.minions[0] += soldiersN;
+		this.minions[1] += archersN;
+		this.minions[2] += magesN;
+	}
+}	

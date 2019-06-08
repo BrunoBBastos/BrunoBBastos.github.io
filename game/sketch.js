@@ -4,25 +4,27 @@ let archers = [];
 let arrows=[];
 let enemyArrows = [];
 let spawnPoints = [];
+let coins = [];
 let score = 0;
-duration = 0;
+let level = 0;
+let levelDuration = 0;
+let runtime = 0;
 
 
 function setup() {
 	createCanvas(800, 600);
 	player = new Player(width/2, height*2/3);
-	spawnPoints.push(new SpawnPoint(50, 50, 2, 5));
-	spawnPoints.push(new SpawnPoint(width - 50, height - 50, 2, 5));
+	manageLevel();
 }
 
 function draw() {
 	updateScreen();
-	keyboard();
 	detectCollisions();
 	updateElements();
 }
 
 function updateElements(){
+	// gibMoney();
 	for(let a = 0; a < arrows.length; a++){
 		if(arrows[a].wasShot){
 			arrows[a].update();
@@ -40,40 +42,39 @@ function updateElements(){
 			}
 		}
 	}
-
+	// Ordena inimigos a adotarem seu comportamento
 	for(let e of enemies){
 		e.behavior();
 	}
-
-	player.show(); // Player acima das flechas
+	// Mostra moedas
+	for(let c of coins){
+		c.show();
+	}
+	// Atualiza o player
+	player.update(); 
 }
 
 function mousePressed(){
+	// Prepara flecha
 	arrows.push(new Arrow(mouseX, mouseY, player));
 }
 
 function mouseReleased(){
+	// Atira flecha
 	let arrowOrigin = createVector(mouseX, mouseY);
 	arrows[arrows.length -1].shoot(arrowOrigin);
 }
 
-function keyboard(){
-	if(keyIsDown(87)) player.pos.y-=3;
-	if(keyIsDown(65)) player.pos.x-=3;
-	if(keyIsDown(83)) player.pos.y+=3;
-	if(keyIsDown(68)) player.pos.x+=3;
-}
-
 function updateScreen(){
 	background(180, 255, 220);
-push();
-textSize(22);
-fill(255, 168, 18);
-textStyle(BOLD);
-textAlign(CENTER, CENTER);
-textFont('Helvetica');
-text(score, width/2, height/16);
-pop();
+	push();
+	textSize(22);
+	fill(255, 168, 18);
+	textStyle(BOLD);
+	textAlign(CENTER, CENTER);
+	textFont('Helvetica');
+	text(score, width/2, height/16);
+	pop();
 }
 
 function detectCollisions(){
@@ -93,7 +94,7 @@ function detectCollisions(){
 			}
 		}
 	}
-
+	// Testa se o player é atingido por setas inimigas
 	for(let a = 0; a < enemyArrows.length; a++){
 		if(circleCircleCollision(enemyArrows[a], player)){
 			noLoop();
@@ -101,12 +102,19 @@ function detectCollisions(){
 			break;
 		}
 	}
-
 	//testa se o inimigo alcança o player
 	for(let e = 0; e < enemies.length; e++){
 		if(circleRectCollision(player, enemies[e])){
 			noLoop();
 			console.log("Game Over");
+		}
+	}
+	// Testa se o player recolhe as moedas
+	for(let c = 0; c < coins.length; c++){
+		if(circleCircleCollision(player, coins[c])){
+			coins.splice(c, 1);
+			score+=4;
+			continue;
 		}
 	}
 }
@@ -135,3 +143,8 @@ function circleCircleCollision(c, o){
 
 }
 
+function gibMoney(){
+	if(millis()/5000 > coins.length){
+		coins.push(new Passives(random(width), random(height)));
+	}
+}
