@@ -9,9 +9,9 @@ class Enemy{
 		this.score = 1;
 	}
 
-	behavior(){
-		this.update();
-	}
+behavior(){
+	this.update();
+}
 
 	update(){
 		let seekForce = this.seek();
@@ -82,9 +82,9 @@ class Archer extends Enemy{
 	}
 
 	shoot(){
-		enemyArrows.push(new Arrow(player.pos.x, player.pos.y, this));
-		let arrowOrigin = createVector(this.pos.x, this.pos.y);
-		enemyArrows[enemyArrows.length -1].shoot(arrowOrigin);
+enemyArrows.push(new Arrow(player.pos.x, player.pos.y, this));
+let arrowOrigin = createVector(this.pos.x, this.pos.y);
+enemyArrows[enemyArrows.length -1].shoot(arrowOrigin);
 	}
 
 	show(){
