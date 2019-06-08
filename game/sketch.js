@@ -6,15 +6,15 @@ let enemyArrows = [];
 let spawnPoints = [];
 let coins = [];
 let score = 0;
-let level = 1;
-duration = 0;
+let level = 0;
+let levelDuration = 0;
+let runtime = 0;
 
 
 function setup() {
 	createCanvas(800, 600);
 	player = new Player(width/2, height*2/3);
-	spawnPoints.push(new SpawnPoint(50, 50, 2, 5));
-	spawnPoints.push(new SpawnPoint(width - 50, height - 50, 2, 5));
+	manageLevel();
 }
 
 function draw() {
@@ -24,7 +24,7 @@ function draw() {
 }
 
 function updateElements(){
-	gibMoney();
+	// gibMoney();
 	for(let a = 0; a < arrows.length; a++){
 		if(arrows[a].wasShot){
 			arrows[a].update();
