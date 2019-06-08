@@ -1,54 +1,55 @@
 class Enemy{
 	constructor(x, y, v, d = 20){
 		this.pos = createVector(x, y);
+		this.vel = v; //createVector(1, 1);
+		this.acc = createVector(0, 0);
 		this.direction = createVector(0, 0);
-		this.vel = v;
 		this.dmt = d;
 		this.life = 1;
 	}
 
 	update(){
-		this.chooseDirection();
-		this.separate();
-		this.direction.setMag(this.vel);
-		this.pos.add(this.direction);
+		let seekForce = this.seek();
+		seekForce.setMag(this.vel);
+		let separation = this.separate();
+		this.acc.add(seekForce);
+		this.acc.add(separation);
+		this.march();
 		this.show();
+	}
+
+	march(){
+		this.pos.add(this.acc);
+		this.acc.set(0, 0);	
+	}
+
+	seek(){
+		let steering = player.pos.copy();
+		steering = steering.sub(this.pos);
+		return steering;
+	}
+
+	separate(){
+		let desiredDistance = this.dmt*1.5;
+		let steering = createVector(0, 0);
+		let total = 0;
+		for(let other of enemies){
+			let distance = dist(this.pos.x, this.pos.y, other.pos.x, other.pos.y);
+			if(this != other && distance < desiredDistance && distance > 0){
+				let difference = this.pos.copy();
+				difference = difference.sub(other.pos);
+				difference.div(distance);
+				steering.add(difference);
+				total++;
+			}
+		}
+		return steering;
 	}
 
 	show(){
 		fill(100);
 		rectMode(CENTER);
 		rect(this.pos.x, this.pos.y, this.dmt, this.dmt);
-	}
-
-	chooseDirection(){
-		let objective = player.pos.copy();
-		this.direction = objective.sub(this.pos);
-		this.direction.setMag(this.vel);
-	}
-
-	separate(){
-		let repulsion = this.vel;
-		let desiredDist = this.dmt*1.5;
-		let sum = createVector();
-		let count = 0;
-		for(let e of enemies){
-			let distance = dist(this.pos.x, this.pos.y, e.pos.y, e.pos.y);
-			if(this != e && distance < desiredDist){
-				let difference = this.pos.copy();
-				difference = difference.sub(e.pos);
-				difference.div(distance);
-				sum.add(difference);
-				count++;
-			}
-		}
-		if(count > 0){
-			sum.div(count);
-			//sum.normalize();
-			sum.setMag(repulsion);
-			// this.direction.sub(sum);
-			this.direction.add(sum);
-		}
 	}
 }
 
