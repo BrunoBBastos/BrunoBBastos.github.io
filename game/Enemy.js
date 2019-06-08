@@ -6,6 +6,7 @@ class Enemy{
 		this.direction = createVector(0, 0);
 		this.dmt = d;
 		this.life = 1;
+		this.score = 1;
 	}
 
 behavior(){
@@ -63,6 +64,7 @@ class Archer extends Enemy{
 		this.sightRadius = 300;
 		this.lastTimeStamp = 0;
 		this.attackSpeed = 2000;
+		this.score = 3;
 	}
 
 	behavior(){
@@ -71,7 +73,6 @@ class Archer extends Enemy{
 			this.update();
 		}
 		else if((millis() - this.lastTimeStamp) > this.attackSpeed){
-			console.log("WTF");
 			this.shoot();
 			this.lastTimeStamp = millis();
 		}
@@ -99,6 +100,7 @@ class SpawnPoint{
 		this.pos = createVector(x, y);
 		this.num = n;
 		this.interval = setInterval(this.spawnEnemies.bind(this), t*1000);
+		this.spawnEnemies();
 	}
 
 	spawnEnemies(){
