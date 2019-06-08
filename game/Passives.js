@@ -12,38 +12,54 @@ class Passives{
 
 function manageLevel(){
 	level++;
-	loadLevel();
+	loadWaves();
 	setTimeout(manageLevel, runTime*1000);
 }
 
-function loadLevel(){
+function loadWaves(){
 
 	switch(level){
 		case 0:
 		break;
 
 		case 1:
-		spawnPoints.push(new SpawnPoint(0, 0, 5, 3, 0, 0));
-		runTime = 25;
+		spawnPoints.push(new SpawnPoint(0, 0, 3, 3, 0, 0));
+		runTime = 20;
 		break;
 
 		case 2:
 		spawnPoints[0].addMinions(-1, 1, 0);
+		spawnPoints[0].period+=2;
 		spawnPoints[0].resetInterval();
 		spawnPoints.push(new SpawnPoint(width, height, 5, 2, 0, 0));
-		runTime = 25;
 		break;
 
 		case 3:
 		spawnPoints[1].addMinions(0, 1, 0);
 		spawnPoints[1].resetInterval();
-		runTime = 25;
 		break;
 
 		case 4:
+		spawnPoints[0].addMinions(1, 0, 0);
+		spawnPoints[0].resetInterval();
+		spawnPoints[1].addMinions(1, 0, 0);
+		spawnPoints[1].resetInterval();
 		break;
 
 		case 5:
+		spawnPoints[0].addMinions(0, 1, 0);
+		spawnPoints[0].resetInterval();
+		spawnPoints[1].addMinions(0, 1, 0);
+		spawnPoints[1].resetInterval();
 		break;
 	}
+}
+
+function gibMoney(){
+	coins.push(new Passives(random(width), random(height)));
+}
+
+function startGame(){
+	manageLevel();
+	setInterval(gibMoney, 5000);
 }

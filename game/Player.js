@@ -1,5 +1,5 @@
 class Player{
-	constructor(x, y, v = 3, d = 30){
+	constructor(x, y, v = 3, d = 20){
 		this.pos = createVector(x, y);
 		this.acc = createVector(0, 0);
 		this.speed = v;

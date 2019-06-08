@@ -14,7 +14,7 @@ let runtime = 0;
 function setup() {
 	createCanvas(800, 600);
 	player = new Player(width/2, height*2/3);
-	manageLevel();
+	startGame();
 }
 
 function draw() {
@@ -143,8 +143,3 @@ function circleCircleCollision(c, o){
 
 }
 
-function gibMoney(){
-	if(millis()/5000 > coins.length){
-		coins.push(new Passives(random(width), random(height)));
-	}
-}
