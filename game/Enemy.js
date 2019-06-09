@@ -16,7 +16,7 @@ class Enemy{
 	}
 
 	update(){
-		let seekForce = this.seek();
+		let seekForce = this.pathfinding();
 		seekForce.setMag(this.vel+this.bonus);
 		let separation = this.separate();
 		this.acc.add(seekForce);
@@ -57,7 +57,56 @@ class Enemy{
 		fill(150);
 		rectMode(CENTER);
 		rect(this.pos.x, this.pos.y, this.dmt, this.dmt);
+		this.pathfinding();
+		//if(!pt) ellipse(pt.x, pt.y);//line(this.pos.x, this.pos.y, player.pos.x, player.pos.y);
 	}
+
+	pathfinding(){
+
+		let steering = createVector(0, 0);
+		for(let b of barriers){
+			// Testa se a linha de visão intersecta com alguma barreira
+			const x1 = b.origin.x // Pontos da barreira
+			const y1 = b.origin.y
+			const x2 = b.ending.x
+			const y2 = b.ending.y
+			const x3 = this.pos.x // Linha de visão
+			const y3 = this.pos.y
+			const x4 = player.pos.x
+			const y4 = player.pos.y
+			const den = (x1-x2)*(y3-y4) - (y1-y2)*(x3-x4); // Cálculo da determinante
+			if(den == 0) return;
+			const t = ((x1-x3)*(y3-y4) - (y1-y3)*(x3-x4))/den;
+			const u =-((x1-x2)*(y1-y3) - (y1-y2)*(x1-x3))/den;
+			if(t>0 && t<1 && u>0){ // Se intersecta
+				// Encontra qual é a esquina mais próxima do jogador
+				let xPos = 0, yPos = 0;
+				if(dist(x1, y1, x4, y4)<dist(x2, y2, x4, y4)){
+					xPos = x1-x3;
+					yPos = y1-y3;
+					steering.set(xPos, yPos);
+				}
+				else{
+					xPos = x2-x3;
+					yPos = y2-y3;
+					steering.set(xPos, yPos);
+				}
+			}
+			else {
+				steering = player.pos.copy();
+				steering = steering.sub(this.pos);
+			}
+			return steering;
+		}
+	}
+
+
+
+
+
+
+
+
 }
 //////////////////////////////////////////////////////////////////
 class Archer extends Enemy{

@@ -76,14 +76,9 @@ class Arrow{
 		translate(this.pos.x, this.pos.y);
 		let dir = this.heading;
 		angleMode(RADIANS);
-		console.log(dir.heading());
 		rotate(dir.heading()+HALF_PI);
 		line(0, 0, 0, 15);
 		triangle(-4, 6, 0, -6, 4, +6);
-		// pop();
-		// push();
-		// translate(player.pos.x, player.pos.y);
-		// triangle(width/2 - 25, height/2 +25, width/2, height/2, width/2 + 25, height/2 +25)
 		pop();
 	}
 
