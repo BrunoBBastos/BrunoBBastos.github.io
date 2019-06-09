@@ -105,9 +105,9 @@ class Mage extends Enemy{
 		super(x, y, v, d = 20);
 		this.sightRadius = 400;
 		this.lastTimeStamp = 0;
-		this.attackSpeed = 2000;
+		this.attackSpeed = 3000;
 		this.score = 50;
-		this.life = 10;
+		this.life = 7;
 		this.auraRadius = 200;
 		this.type = 'mage';
 	}
@@ -181,4 +181,9 @@ class SpawnPoint{
 		this.minions[1] += archersN;
 		this.minions[2] += magesN;
 	}
+
+	stop(){
+		clearTimeout(this.interval);
+	}
+
 }	
