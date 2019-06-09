@@ -185,8 +185,8 @@ function logStats(){
 		+ "\nEnemies killed: " + enemiesK
 		+ "\nCoins picked: " + coinsPicked
 		+ "\nArrows fired: " + arrowsFired
-		+ "\nAccuracy: " + accuracy + "%",
-		width*1/2, height/2);
+		+ "\n % Accuracy: " + accuracy,
+		width*7/8, height/8);
 	pop();
 }
 
