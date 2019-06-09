@@ -80,8 +80,8 @@ function operationMode(){
 		break;
 
 		case 5:
+		logStats();
 		noLoop();
-		// endGame();
 		break;
 	}
 }
@@ -172,6 +172,24 @@ function gameOver(){
 	level = 0;
 }
 
+function logStats(){
+	let accuracy = 0;
+	if(enemiesK !=0)accuracy = (100*enemiesK/arrowsFired).toFixed(2);
+	push();
+	textSize(20);
+	fill(220,20,60);
+	// textStyle(BOLD);
+	textFont('Helvetica');
+	textAlign(RIGHT, CENTER);
+	text("Score: " + score 
+		+ "\nEnemies killed: " + enemiesK
+		+ "\nCoins picked: " + coinsPicked
+		+ "\nArrows fired: " + arrowsFired
+		+ "\nAccuracy: " + accuracy + "%",
+		width*1/2, height/2);
+	pop();
+}
+
 function keyPressed(){
 	switch(mode){
 		case 0:
@@ -184,15 +202,15 @@ function keyPressed(){
 		break;
 		// GameOn
 		case 3:
-		if(keyCode === ESCAPE){
-			mode++;
-		}
+		// if(keyCode === ESCAPE){
+		// 	mode++;
+		// }
 		break;
 		// Pause
 		case 4:
-		if(keyCode === ESCAPE){
-			mode--;
-		}
+		// if(keyCode === ESCAPE){
+		// 	mode--;
+		// }
 		break;
 		// End Game
 		case 5:
