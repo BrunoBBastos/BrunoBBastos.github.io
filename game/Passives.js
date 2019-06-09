@@ -158,15 +158,15 @@ function updateScreen(){
 	textStyle(BOLD);
 	textAlign(CENTER, CENTER);
 	textFont('Helvetica');
-	text(score, width/2, height/16);
+	text(player.money, width/2, height/16);
 	pop();
 }
 
 function gameOver(){
-	if(highScore < score){
-		highScore = score;
+	if(highScore < player.score){
+		highScore = player.score;
 	}
-	score = 0;
+	player.score = 0;
 	mode = 1;
 	clearTimeout(levelDuration);
 	enemies.splice(0, enemies.length);
@@ -192,13 +192,16 @@ function logStats(){
 	textStyle(BOLD);
 	textFont('Helvetica');
 	textAlign(RIGHT, CENTER);
-	text("Score: " + score 
+	text("Score: " + player.score 
 		+ "\nEnemies killed: " + enemiesK
 		+ "\nCoins picked: " + coinsPicked
 		+ "\nArrows fired: " + arrowsFired
 		+ "\n % Accuracy: " + accuracy,
 		width*7/8, height/8);
 	pop();
+	enemiesK = 0;
+	coinsPicked = 0;
+	arrowsFired = 0;
 }
 
 function keyPressed(){
@@ -229,6 +232,17 @@ function keyPressed(){
 			mode=1;
 			gameOver();
 			loop();
+		}
+		break;
+	}
+}
+
+function keyTyped(){
+	switch(mode){
+
+		case 3:
+		if(key === ' '){
+			player.buySpecialArrows();
 		}
 		break;
 	}

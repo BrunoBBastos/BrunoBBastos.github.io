@@ -5,7 +5,7 @@ let arrows=[];
 let enemyArrows = [];
 let spawnPoints = [];
 let coins = [];
-let score = 0;
+let money = 0;
 let highScore = 0;
 let level = 0;
 let levelDuration;
@@ -84,6 +84,11 @@ function mouseReleased(){
 		// Atira flecha
 		let arrowOrigin = createVector(mouseX, mouseY);
 		arrows[arrows.length -1].shoot(arrowOrigin);
+		if(player.hasSpecialArrows) {
+			arrows[arrows.length -1].isSpecial = true;
+			player.hasSpecialArrows--;
+		}
+		console.log(arrows[arrows.length -1].isSpecial);
 		arrowsFired++;
 		break;
 	}
@@ -97,11 +102,13 @@ function detectCollisions(){
 			if(circleRectCollision(arrows[a], enemies[e])){
 				enemies[e].life--;
 				if(enemies[e].life <= 0){
-					score += enemies[e].score;
+					player.scorePoints(enemies[e].score);
 					
 					enemies.splice(e, 1);
 				}
-				arrows.splice(a, 1);
+				if(!arrows[a].isSpecial) {
+					arrows.splice(a, 1);
+				}
 				itHits = true;
 				enemiesK++;
 				break;
@@ -133,7 +140,7 @@ function detectCollisions(){
 	for(let c = 0; c < coins.length; c++){
 		if(circleCircleCollision(player, coins[c])){
 			coins.splice(c, 1);
-			score+=2;
+			player.scorePoints(2);
 			coinsPicked++;
 			continue;
 		}
