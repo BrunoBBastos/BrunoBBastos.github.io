@@ -23,7 +23,7 @@ function loadWaves(){
 		break;
 
 		case 1:
-		spawnPoints.push(new SpawnPoint(0, 0, 3, 3, 0, 0));
+		spawnPoints.push(new SpawnPoint(0, 0, 3, 3, 0, 1));
 		runTime = 20;
 		break;
 
