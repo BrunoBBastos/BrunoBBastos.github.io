@@ -11,7 +11,7 @@ let level = 0;
 let levelDuration;
 let runtime = 0;
 let mode = 0;
-let cinInterval;
+let enemiesK = 0, coinsPicked = 0, arrowsFired = 0;
 
 
 function setup() {
@@ -83,6 +83,7 @@ function mouseReleased(){
 		// Atira flecha
 		let arrowOrigin = createVector(mouseX, mouseY);
 		arrows[arrows.length -1].shoot(arrowOrigin);
+		arrowsFired++;
 		break;
 	}
 }
@@ -97,6 +98,7 @@ function detectCollisions(){
 				arrows.splice(a, 1);
 				enemies.splice(e, 1);
 				itHits = true;
+				enemiesK++;
 				break;
 			}
 			if(itHits){
@@ -126,7 +128,8 @@ function detectCollisions(){
 	for(let c = 0; c < coins.length; c++){
 		if(circleCircleCollision(player, coins[c])){
 			coins.splice(c, 1);
-			score+=4;
+			score+=2;
+			coinsPicked++;
 			continue;
 		}
 	}
