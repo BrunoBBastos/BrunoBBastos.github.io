@@ -12,6 +12,7 @@ let levelDuration;
 let runtime = 0;
 let mode = 0;
 let enemiesK = 0, coinsPicked = 0, arrowsFired = 0;
+let lastWave = false;
 
 
 function setup() {
@@ -94,9 +95,13 @@ function detectCollisions(){
 		let itHits = false;
 		for(let e = 0; e < enemies.length; e++){
 			if(circleRectCollision(arrows[a], enemies[e])){
-				score+= enemies[e].score;
+				enemies[e].life--;
+				if(enemies[e].life <= 0){
+					score += enemies[e].score;
+					
+					enemies.splice(e, 1);
+				}
 				arrows.splice(a, 1);
-				enemies.splice(e, 1);
 				itHits = true;
 				enemiesK++;
 				break;
@@ -156,6 +161,5 @@ function circleRectCollision(c, r){
 
 function circleCircleCollision(c, o){
 	return(dist(c.pos.x, c.pos.y, o.pos.x, o.pos.y) < c.dmt /2 + o.dmt/2);
-
 }
 

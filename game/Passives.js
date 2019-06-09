@@ -11,26 +11,34 @@ class Passives{
 }
 
 function manageLevel(){
-	level++;
-	loadWaves();
-	levelDuration = setTimeout(manageLevel, runTime*1000);
-}
+	if(!lastWave)
+		{level++;
+			loadWaves();
+			levelDuration = setTimeout(manageLevel, runTime*1000);
+		}
+		else {
+			clearTimeout(levelDuration);
+			for(let s of spawnPoints){
+				s.stop();
+			}
+		}
+	}
 
-function loadWaves(){
+	function loadWaves(){
 
-	switch(level){
-		case 0:
-		break;
+		switch(level){
+			case 0:
+			break;
 
-		case 1:
-		spawnPoints.push(new SpawnPoint(0, 0, 3, 3, 0, 0));
-		runTime = 20;
-		break;
+			case 1:
+			spawnPoints.push(new SpawnPoint(0, 0, 3, 3, 0, 0));
+			runTime = 20;
+			break;
 
-		case 2:
-		spawnPoints[0].addMinions(-1, 1, 0);
-		spawnPoints[0].period+=2;
-		spawnPoints[0].resetInterval();
+			case 2:
+			spawnPoints[0].addMinions(-1, 1, 0);
+			spawnPoints[0].period+=2;
+		spawnPoints[0].resetInterval(); // Resetar depois de modificar as propriedades
 		spawnPoints.push(new SpawnPoint(width, height, 5, 2, 0, 0));
 		break;
 
@@ -49,8 +57,10 @@ function loadWaves(){
 		case 5:
 		spawnPoints[0].addMinions(0, 1, 0);
 		spawnPoints[0].resetInterval();
-		spawnPoints[1].addMinions(0, 1, 0);
+		spawnPoints[1].addMinions(0, 1, 1);
 		spawnPoints[1].resetInterval();
+		runtime = 5;
+		lastWave = true;
 		break;
 	}
 }
@@ -169,6 +179,7 @@ function gameOver(){
 	spawnPoints.splice(0, spawnPoints.length);
 	clearTimeout(coinInterval);
 	coins.splice(0, coins.length);
+	lastWave = false;
 	level = 0;
 }
 
@@ -176,9 +187,9 @@ function logStats(){
 	let accuracy = 0;
 	if(enemiesK !=0)accuracy = (100*enemiesK/arrowsFired).toFixed(2);
 	push();
-	textSize(20);
+	textSize(18);
 	fill(220,20,60);
-	// textStyle(BOLD);
+	textStyle(BOLD);
 	textFont('Helvetica');
 	textAlign(RIGHT, CENTER);
 	text("Score: " + score 

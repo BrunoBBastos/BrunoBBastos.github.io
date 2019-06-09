@@ -7,6 +7,8 @@ class Enemy{
 		this.dmt = d;
 		this.life = 1;
 		this.score = 1;
+		this.bonus = 0;
+		this.type = 'soldier';
 	}
 
 	behavior(){
@@ -15,7 +17,7 @@ class Enemy{
 
 	update(){
 		let seekForce = this.seek();
-		seekForce.setMag(this.vel);
+		seekForce.setMag(this.vel+this.bonus);
 		let separation = this.separate();
 		this.acc.add(seekForce);
 		this.acc.add(separation);
@@ -52,7 +54,7 @@ class Enemy{
 	}
 
 	show(){
-		fill(100);
+		fill(150);
 		rectMode(CENTER);
 		rect(this.pos.x, this.pos.y, this.dmt, this.dmt);
 	}
@@ -65,6 +67,8 @@ class Archer extends Enemy{
 		this.lastTimeStamp = 0;
 		this.attackSpeed = 2000;
 		this.score = 3;
+		this.bonus = 0;
+		this.type = 'archer';
 	}
 
 	behavior(){
@@ -94,6 +98,57 @@ class Archer extends Enemy{
 	}
 
 }
+
+//////////////////////////////////////////////////////////////////
+class Mage extends Enemy{
+	constructor(x, y, v, d = 20){
+		super(x, y, v, d = 20);
+		this.sightRadius = 400;
+		this.lastTimeStamp = 0;
+		this.attackSpeed = 3000;
+		this.score = 50;
+		this.life = 7;
+		this.auraRadius = 200;
+		this.type = 'mage';
+	}
+
+	behavior(){
+		this.aura();
+		let distance = dist(this.pos.x, this.pos.y, player.pos.x, player.pos.y);
+		if(distance > this.sightRadius){
+			this.update();
+		}
+		else if((millis() - this.lastTimeStamp) > this.attackSpeed){
+			this.shoot();
+			this.lastTimeStamp = millis();
+		}
+		else{
+			this.show();
+		}
+	}
+
+	aura(){
+		for(let other of enemies){
+			if(this.type != other.type && dist(other.pos.x, other.pos.y, this.pos.x, this.pos.y) < this.auraRadius){
+				other.bonus = 0.7;
+			}
+			else other.bonus = 0;
+		}
+	}
+
+	shoot(){
+		enemyArrows.push(new Arrow(player.pos.x, player.pos.y, this));
+		let arrowOrigin = createVector(this.pos.x, this.pos.y);
+		enemyArrows[enemyArrows.length -1].shoot(arrowOrigin);
+	}
+
+	show(){
+		fill(0);
+		rectMode(CENTER);
+		rect(this.pos.x, this.pos.y, this.dmt, this.dmt);
+	}
+
+}
 //////////////////////////////////////////////////////////////////
 class SpawnPoint{
 	constructor(x, y, t, s, a, m){
@@ -111,6 +166,9 @@ class SpawnPoint{
 		for(let a = 0; a < archersN; a++){
 			enemies.push(new Archer(this.pos.x+random(-10, 10), this.pos.y+ random(-10, 10), 1));
 		}
+		for(let a = 0; a < magesN; a++){
+			enemies.push(new Mage(this.pos.x+random(-10, 10), this.pos.y+ random(-10, 10), 0.7));
+		}
 	}
 
 	resetInterval(){
@@ -123,4 +181,9 @@ class SpawnPoint{
 		this.minions[1] += archersN;
 		this.minions[2] += magesN;
 	}
+
+	stop(){
+		clearTimeout(this.interval);
+	}
+
 }	
