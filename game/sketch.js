@@ -33,7 +33,7 @@ function updateElements(){
 	for(let a = 0; a < arrows.length; a++){
 		if(arrows[a].wasShot){
 			arrows[a].update();
-			if(arrows[a].pos.x<arrows[a].dmt || arrows[a].pos.x>width+arrows[a].dmt ||arrows[a].pos.y<arrows[a].dmt || arrows[a].pos.y>height+arrows[a].dmt){
+			if(arrows[a].pos.x<-arrows[a].dmt || arrows[a].pos.x>width+arrows[a].dmt ||arrows[a].pos.y<-arrows[a].dmt || arrows[a].pos.y>height+arrows[a].dmt){
 				arrows.splice(a, 1);
 			}
 		}
@@ -41,7 +41,7 @@ function updateElements(){
 	for(let i = 0; i < enemyArrows.length; i++){
 		if(enemyArrows[i].wasShot){
 			enemyArrows[i].update();
-			if(enemyArrows[i].pos.x<enemyArrows[i].dmt || enemyArrows[i].pos.x>width+enemyArrows[i].dmt ||enemyArrows[i].pos.y<enemyArrows[i].dmt || enemyArrows[i].pos.y>height+enemyArrows[i].dmt){
+			if(enemyArrows[i].pos.x<-enemyArrows[i].dmt || enemyArrows[i].pos.x>width+enemyArrows[i].dmt ||enemyArrows[i].pos.y<-enemyArrows[i].dmt || enemyArrows[i].pos.y>height+enemyArrows[i].dmt){
 				enemyArrows.splice(i, 1);
 			}
 		}
@@ -91,6 +91,8 @@ function mouseReleased(){
 		arrows[arrows.length -1].shoot(arrowOrigin);
 		if(player.hasSpecialArrows) {
 			arrows[arrows.length -1].isSpecial = true;
+			arrows[arrows.length -1].dmt = 15;
+			arrows[arrows.length -1].col.set(85, 0, 200);
 			player.hasSpecialArrows--;
 		}
 		arrowsFired++;

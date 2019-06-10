@@ -45,9 +45,9 @@ class Player{
 	}
 
 	buySpecialArrows(){
-		if(this.money >= 10){
+		if(this.money >=15){
 			this.hasSpecialArrows++;
-			this.money-=10;
+			this.money-=15;
 		}
 	}
 }
@@ -63,6 +63,7 @@ class Arrow{
 		this.origin = createVector(0, 0);
 		this.wasShot = false;
 		this.isSpecial = false;
+		this.col = createVector(220, 220, 200);
 	}
 
 	update(){
@@ -74,7 +75,7 @@ class Arrow{
 
 	show(){
 		push();
-		fill(220);
+		fill(this.col.x, this.col.y, this.col.z);
 		translate(this.pos.x, this.pos.y);
 		let dir = this.heading;
 		angleMode(RADIANS);

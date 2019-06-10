@@ -1,7 +1,7 @@
 class Enemy{
 	constructor(x, y, v, d = 20){
 		this.pos = createVector(x, y);
-		this.vel = v; //createVector(1, 1);
+		this.vel = v;
 		this.acc = createVector(0, 0);
 		this.direction = createVector(0, 0);
 		this.dmt = d;
@@ -20,7 +20,6 @@ class Enemy{
 		let seekForce = createVector(0, 0);
 		this.pathfinding(this.pos, player.pos, barrierList);
 		seekForce.set(this.direction);
-		// console.log(seekForce);
 		seekForce.setMag(this.vel+this.bonus);
 		let separation = this.separate();
 		this.acc.add(seekForce);
@@ -61,8 +60,6 @@ class Enemy{
 		fill(150);
 		rectMode(CENTER);
 		rect(this.pos.x, this.pos.y, this.dmt, this.dmt);
-		// this.pathfinding();
-		//if(!pt) ellipse(pt.x, pt.y);//line(this.pos.x, this.pos.y, player.pos.x, player.pos.y);
 	}
 
 	pathfinding(from, to, list){
@@ -82,12 +79,8 @@ class Enemy{
 					objective = closest.copy();
 					wtf.splice(b, 1);
 					this.pathfinding(startingP, objective, wtf);
-				
-				}	
-				else{
-					// objective = objective.sub(startingP);
-					// break;
-				}	
+
+				}		
 			}
 					this.direction.set(objective.sub(startingP));
 		}
@@ -97,48 +90,8 @@ class Enemy{
 			
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-				let xPos = 0, yPos = 0;
-				if(dist(x1, y1, x4, y4)+dist(x1, y1, x3, y3)<dist(x2, y2, x4, y4)+dist(x2, y2, x3, y3)){
-					xPos = x1-x3;
-					yPos = y1-y3;
-					steering.set(xPos, yPos);
-				}
-				else{
-					xPos = x2-x3;
-					yPos = y2-y3;
-					steering.set(xPos, yPos);
-				}
-			}
-			else {
-				steering = player.pos.copy();
-				steering = steering.sub(this.pos);
-			}
-			return steering;
-		}
-	}
-
-	*/
-
-
-
-
-
-
 }
+
 //////////////////////////////////////////////////////////////////
 class Archer extends Enemy{
 	constructor(x, y, v, d = 20){
@@ -267,7 +220,6 @@ class SpawnPoint{
 	}
 
 }	
-
 
 function intersects(from, bar){
 	// console.log("testing");
