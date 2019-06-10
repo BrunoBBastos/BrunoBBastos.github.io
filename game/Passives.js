@@ -51,7 +51,10 @@ function manageLevel(){
 			let barrierO = createVector(width/4, height/2);
 			let barrierE = createVector(width/2, height/4);
 			barriers.push(new Barrier(barrierO, barrierE));
-			spawnPoints.push(new SpawnPoint(0, 0, 3, 3, 0, 0));
+			barrierO = createVector(width*3/4, height/2);
+			barrierE = createVector(width/2, height*3/4);
+			barriers.push(new Barrier(barrierO, barrierE));
+			spawnPoints.push(new SpawnPoint(0, 0, 3, 3, 0, 0)); // 0 0 3 3 0 0
 			runTime = 20;
 			break;
 

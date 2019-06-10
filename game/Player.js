@@ -45,7 +45,6 @@ class Player{
 		if(this.money >= 10){
 			this.hasSpecialArrows++;
 			this.money-=10;
-			console.log("bought an arrow")
 		}
 	}
 }

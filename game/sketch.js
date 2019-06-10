@@ -93,7 +93,6 @@ function mouseReleased(){
 			arrows[arrows.length -1].isSpecial = true;
 			player.hasSpecialArrows--;
 		}
-		console.log(arrows[arrows.length -1].isSpecial);
 		arrowsFired++;
 		break;
 	}
