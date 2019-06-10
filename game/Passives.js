@@ -9,7 +9,24 @@ class Passives{
 		ellipse(this.pos.x, this.pos.y, sin(millis()/1000)*this.dmt, this.dmt);
 	}
 }
+////////////////////////////////////////////////////////////////
+class Barrier
+{
+	constructor(o, e){
+		this.origin = o;
+		this.ending = e;
+	}
 
+	show(){
+		push()
+		strokeWeight(4);
+		stroke(50, 180, 70);
+		line(this.origin.x, this.origin.y, this.ending.x, this.ending.y);
+		pop();
+	}
+}
+
+/////////////////////////////////////////////////////////////////
 function manageLevel(){
 	if(!lastWave)
 		{level++;
@@ -31,7 +48,13 @@ function manageLevel(){
 			break;
 
 			case 1:
-			spawnPoints.push(new SpawnPoint(0, 0, 3, 3, 0, 0));
+			let barrierO = createVector(width/4, height/2);
+			let barrierE = createVector(width/2, height/4);
+			barriers.push(new Barrier(barrierO, barrierE));
+			barrierO = createVector(width*3/4, height/2);
+			barrierE = createVector(width/2, height*3/4);
+			barriers.push(new Barrier(barrierO, barrierE));
+			spawnPoints.push(new SpawnPoint(0, 0, 3, 3, 0, 0)); // 0 0 3 3 0 0
 			runTime = 20;
 			break;
 
@@ -78,7 +101,7 @@ function operationMode(){
 		break;
 
 		case 2:
-		initGame();
+		setupGame();
 		break;
 
 		case 3:
@@ -97,7 +120,7 @@ function operationMode(){
 }
 
 function presentation(){
-	if(millis() < 2000){
+	if(millis() < 200){
 		background(0);
 		push();
 		textSize(60);
@@ -128,7 +151,7 @@ function menu(){
 	pop();
 }
 
-function initGame(){
+function setupGame(){
 	player = new Player(width/2, height/2);
 	startGame();
 	mode++;
@@ -211,7 +234,7 @@ function keyPressed(){
 		// Menu
 		case 1:
 		break;
-		// Init
+		// SetupGame
 		case 2:
 		break;
 		// GameOn

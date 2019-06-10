@@ -5,6 +5,7 @@ let arrows=[];
 let enemyArrows = [];
 let spawnPoints = [];
 let coins = [];
+let barriers =[];
 let money = 0;
 let highScore = 0;
 let level = 0;
@@ -24,6 +25,10 @@ function draw() {
 }
 
 function updateElements(){
+
+	for(let b of barriers){
+		b.show();
+	}
 	// Deleta flechas se passarem dos limites da tela
 	for(let a = 0; a < arrows.length; a++){
 		if(arrows[a].wasShot){
@@ -88,7 +93,6 @@ function mouseReleased(){
 			arrows[arrows.length -1].isSpecial = true;
 			player.hasSpecialArrows--;
 		}
-		console.log(arrows[arrows.length -1].isSpecial);
 		arrowsFired++;
 		break;
 	}
