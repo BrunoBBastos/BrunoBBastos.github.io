@@ -56,7 +56,7 @@ class Arrow{
 	constructor(x, y, s, v){
 		this.shooter = s;
 		this.pos = createVector(this.shooter.pos.x, this.shooter.pos.y);
-		this.dmt = 10;
+		this.dmt = 1;
 		this.speed;
 		this.heading = createVector(x, y);
 		this.finalVector = createVector(0, 0);
@@ -79,8 +79,8 @@ class Arrow{
 		let dir = this.heading;
 		angleMode(RADIANS);
 		rotate(dir.heading()+HALF_PI);
-		line(0, 0, 0, 15);
-		triangle(-4, 6, 0, -6, 4, +6);
+		line(0, 12, 0, 27);
+		triangle(-4, 12, 0, 0, 4, 12);
 		pop();
 	}
 
