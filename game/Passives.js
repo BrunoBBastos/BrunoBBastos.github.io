@@ -221,6 +221,10 @@ function logStats(){
 		+ "\nArrows fired: " + arrowsFired
 		+ "\n % Accuracy: " + accuracy,
 		width*7/8, height/8);
+	textSize(18);
+	fill(0);
+	textAlign(CENTER);
+	text("- Game Over -\nPress 'Esc' to continue", width/2, height/2);
 	pop();
 	enemiesK = 0;
 	coinsPicked = 0;
