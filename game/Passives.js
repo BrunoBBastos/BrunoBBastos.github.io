@@ -42,7 +42,7 @@ function manageLevel(){
 	}
 
 	function loadWaves(){
-
+		let randomP;
 		switch(level){
 			case 0:
 			break;
@@ -54,7 +54,8 @@ function manageLevel(){
 			barrierO = createVector(width*3/4, height/2);
 			barrierE = createVector(width/2, height*3/4);
 			barriers.push(new Barrier(barrierO, barrierE));
-			spawnPoints.push(new SpawnPoint(0, 0, 3, 3, 0, 0)); // 0 0 3 3 0 0
+			randomP = random(width);
+			spawnPoints.push(new SpawnPoint(randomP, 0, 3, 3, 0, 0)); // 0 0 3 3 0 0
 			runTime = 20;
 			break;
 
@@ -62,7 +63,8 @@ function manageLevel(){
 			spawnPoints[0].addMinions(-1, 1, 0);
 			spawnPoints[0].period+=2;
 		spawnPoints[0].resetInterval(); // Resetar depois de modificar as propriedades
-		spawnPoints.push(new SpawnPoint(width, height, 5, 2, 0, 0));
+		randomP = random(width);
+		spawnPoints.push(new SpawnPoint(randomP, height, 5, 2, 0, 0));
 		break;
 
 		case 3:
