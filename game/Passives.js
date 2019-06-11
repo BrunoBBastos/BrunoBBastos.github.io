@@ -54,37 +54,39 @@ function manageLevel(){
 			barrierO = createVector(width*3/4, height/2);
 			barrierE = createVector(width/2, height*3/4);
 			barriers.push(new Barrier(barrierO, barrierE));
+
 			randomP = random(width);
-			spawnPoints.push(new SpawnPoint(randomP, 0, 3, 3, 0, 0)); // 0 0 3 3 0 0
+			spawnPoints.push(new SpawnPoint(randomP, 0, 3, 2, 0, 0));
+
+			randomP = random(width);
+		spawnPoints.push(new SpawnPoint(randomP, height, 3, 2, 0, 0));
+
 			runTime = 20;
 			break;
 
 			case 2:
 			spawnPoints[0].addMinions(-1, 1, 0);
 			spawnPoints[0].period+=2;
+			spawnPoints[1].period+=2;
 		spawnPoints[0].resetInterval(); // Resetar depois de modificar as propriedades
-		randomP = random(width);
-		spawnPoints.push(new SpawnPoint(randomP, height, 5, 2, 0, 0));
+		spawnPoints[1].resetInterval(); 
+		
 		break;
 
 		case 3:
 		spawnPoints[1].addMinions(0, 1, 0);
-		spawnPoints[1].resetInterval();
 		break;
 
 		case 4:
 		spawnPoints[0].addMinions(1, 0, 0);
-		spawnPoints[0].resetInterval();
 		spawnPoints[1].addMinions(1, 0, 0);
-		spawnPoints[1].resetInterval();
+		
 		break;
 
 		case 5:
 		spawnPoints[0].addMinions(0, 1, 0);
-		spawnPoints[0].resetInterval();
 		spawnPoints[1].addMinions(0, 1, 1);
-		spawnPoints[1].resetInterval();
-		runtime = 5;
+		runtime = 4;
 		lastWave = true;
 		break;
 	}
@@ -275,4 +277,8 @@ function keyTyped(){
 		}
 		break;
 	}
+}
+
+function loadImgs(){
+	playerImg = loadImage("playerImg.png");
 }

@@ -213,6 +213,7 @@ class SpawnPoint{
 		this.minions[0] += soldiersN;
 		this.minions[1] += archersN;
 		this.minions[2] += magesN;
+		this.resetInterval();
 	}
 
 	stop(){

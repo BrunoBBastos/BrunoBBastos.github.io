@@ -21,7 +21,15 @@ class Player{
 	show(){
 		this.edges();
 		fill(this.col.x, this.col.y, this.col.z);
-		circle(this.pos.x, this.pos.y, this.dmt);
+		// circle(this.pos.x, this.pos.y, this.dmt);
+		let dir = createVector(mouseX - this.pos.x, mouseY-this.pos.y);
+		push();
+		imageMode(CENTER);
+		angleMode(RADIANS);
+		translate(this.pos.x, this.pos.y);
+		rotate(dir.heading()+HALF_PI);
+		image(playerImg, 0, 0);
+		pop();
 	}
 
 	edges(){

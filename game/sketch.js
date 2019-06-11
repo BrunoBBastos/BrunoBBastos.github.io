@@ -15,13 +15,23 @@ let mode = 0;
 let enemiesK = 0, coinsPicked = 0, arrowsFired = 0;
 let lastWave = false;
 
+let mouseh;
+let mouseDir;
+let playerImg;
+
 
 function setup() {
 	createCanvas(800, 600);
+	loadImgs();
+	mouseDir = createVector();
 }
 
 function draw() {
 	operationMode();
+	angleMode(DEGREES);
+mouseDir = createVector(mouseX, mouseY);
+mouseh = mouseDir.heading();
+console.log(mouseh);
 }
 
 function updateElements(){
@@ -146,7 +156,7 @@ function detectCollisions(){
 	for(let c = 0; c < coins.length; c++){
 		if(circleCircleCollision(player, coins[c])){
 			coins.splice(c, 1);
-			player.scorePoints(2);
+			player.scorePoints(3);
 			coinsPicked++;
 			continue;
 		}
