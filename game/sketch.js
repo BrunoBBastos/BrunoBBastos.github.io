@@ -6,6 +6,8 @@ let enemyArrows = [];
 let spawnPoints = [];
 let coins = [];
 let barriers =[];
+let fakeEnemy = [];
+let fakeArrows = [];
 let money = 0;
 let highScore = 0;
 let level = 0;
@@ -13,25 +15,26 @@ let levelDuration;
 let runtime = 0;
 let mode = 0;
 let enemiesK = 0, coinsPicked = 0, arrowsFired = 0;
+let wave = 0;
 let lastWave = false;
 
-let mouseh;
-let mouseDir;
 let playerImg;
+let ptStr;
+let font;
 
+function preload(){
+	font = loadFont('manaspc.ttf'); //
+}
 
 function setup() {
 	createCanvas(800, 600);
 	loadImgs();
-	mouseDir = createVector();
+	fakeArrows[1000] = 1;
 }
 
 function draw() {
 	operationMode();
 	angleMode(DEGREES);
-mouseDir = createVector(mouseX, mouseY);
-mouseh = mouseDir.heading();
-console.log(mouseh);
 }
 
 function updateElements(){

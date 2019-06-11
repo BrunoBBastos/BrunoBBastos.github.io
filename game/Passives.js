@@ -29,71 +29,88 @@ class Barrier
 /////////////////////////////////////////////////////////////////
 function manageLevel(){
 	if(!lastWave)
-		{level++;
-			loadWaves();
-			levelDuration = setTimeout(manageLevel, runTime*1000);
-		}
-		else {
-			clearTimeout(levelDuration);
-			for(let s of spawnPoints){
-				s.stop();
-			}
-		}
+	{
+		wave++;
+		loadWaves();
+		levelDuration = setTimeout(manageLevel, runTime*1000);
 	}
+	else {
 
-	function loadWaves(){
-		let randomP;
-		switch(level){
-			case 0:
-			break;
+		// clearTimeout(levelDuration);
+		// for(let s of spawnPoints){
+		// 	s.stop();
+	}
+}
 
-			case 1:
-			let barrierO = createVector(width/4, height/2);
-			let barrierE = createVector(width/2, height/4);
-			barriers.push(new Barrier(barrierO, barrierE));
-			barrierO = createVector(width*3/4, height/2);
-			barrierE = createVector(width/2, height*3/4);
-			barriers.push(new Barrier(barrierO, barrierE));
+function loadWaves(){
+	let randomP;
+	switch(wave){
+		case 0:
+		break;
 
-			randomP = random(width);
-			spawnPoints.push(new SpawnPoint(randomP, 0, 3, 2, 0, 0));
+		case 1:
+		console.log("1st Wave");
+		let barrierO = createVector(width/4, height/2);
+		let barrierE = createVector(width/2, height/4);
+		barriers.push(new Barrier(barrierO, barrierE));
+		barrierO = createVector(width*3/4, height/2);
+		barrierE = createVector(width/2, height*3/4);
+		barriers.push(new Barrier(barrierO, barrierE));
 
-			randomP = random(width);
-		spawnPoints.push(new SpawnPoint(randomP, height, 3, 2, 0, 0));
 
-			runTime = 20;
-			break;
+		randomP = random(width);
+		spawnPoints.push(new SpawnPoint(randomP, 	  0, 3, 3, 2, 0, 0));
+		randomP = random(width);
+		spawnPoints.push(new SpawnPoint(randomP, height, 3, 3, 2, 0, 0));
+		runTime = 15;
+		break;
 
-			case 2:
-			spawnPoints[0].addMinions(-1, 1, 0);
-			spawnPoints[0].period+=2;
-			spawnPoints[1].period+=2;
-		spawnPoints[0].resetInterval(); // Resetar depois de modificar as propriedades
+		case 2:
+		console.log("2nd Wave");
+		spawnPoints[0].period+=2000;
+		spawnPoints[1].period+=2000;
+		spawnPoints[0].resetInterval(); 
 		spawnPoints[1].resetInterval(); 
-		
+		randomP = random(height);
+		spawnPoints.push(new SpawnPoint(0, 	   randomP, 5, 3, 2, 0, 0));
+		randomP = random(height);
+		spawnPoints.push(new SpawnPoint(width, randomP, 5, 3, 2, 0, 0));
+
 		break;
 
 		case 3:
-		spawnPoints[1].addMinions(0, 1, 0);
+		console.log("3rd Wave");
+		spawnPoints[0].addMinions(1, 0, 0);
+		spawnPoints[1].addMinions(1, 0, 0);
+		spawnPoints[2].resetInterval();
+		spawnPoints[3].resetInterval();
+		returnTime = 20;
 		break;
 
 		case 4:
-		spawnPoints[0].addMinions(1, 0, 0);
-		spawnPoints[1].addMinions(1, 0, 0);
-		
+		console.log("4th Wave");
+		spawnPoints[2].addMinions(0, 1, 0);
+		spawnPoints[3].addMinions(0, 1, 0);
 		break;
 
 		case 5:
-		spawnPoints[0].addMinions(0, 1, 0);
-		spawnPoints[1].addMinions(0, 1, 1);
-		runtime = 4;
+		console.log("5th Wave");
+		spawnPoints[0].manyWaves = 1;
+		spawnPoints[1].manyWaves = 1;
+		spawnPoints[2].manyWaves = 1;
+		spawnPoints[3].manyWaves = 1;
+		spawnPoints[0].addMinions(0, 0, 1);
+		spawnPoints[1].resetInterval;
+		spawnPoints[2].resetInterval;
+		spawnPoints[3].resetInterval;
+		runtime = 5;
 		lastWave = true;
 		break;
 	}
 }
 
 function operationMode(){
-	
+
 	switch(mode){
 
 		case 0:
@@ -117,6 +134,13 @@ function operationMode(){
 		break;
 
 		case 5:
+		clearTimeout(levelDuration);
+
+		for(let s = 0; s < spawnPoints.length; s++){
+			clearTimeout(spawnPoints[s].interval);
+		}
+		spawnPoints.splice(0, spawnPoints.length);
+		clearTimeout(coinInterval);
 		logStats();
 		noLoop();
 		break;
@@ -124,16 +148,34 @@ function operationMode(){
 }
 
 function presentation(){
-	if(millis() < 200){
+
+	if(millis() < 1000){
 		background(0);
-		push();
-		textSize(60);
-		fill(255);
-		textStyle(BOLD);
-		textAlign(CENTER, CENTER);
-		textFont('Helvetica');
-		text("Title", width/2, height/2);
-		pop();
+		if(fakeArrows.length == 1001){
+			fakeArrows.splice(0, fakeArrows.length);
+			push();
+			textSize(80);
+			textFont(font);
+			textStyle(BOLD);
+			textAlign(CENTER, CENTER);
+			ptStr = font.textToPoints("Archer", 200, height/2);
+			stroke(255);
+			strokeWeight(5);
+			fakeEnemy.push(new Enemy(10, 10 ,0));
+			for(let i = 0; i < ptStr.length; i++){
+				let arrowPoint = ptStr[i];
+				point(arrowPoint.x, arrowPoint.y);
+				fakeArrows.push(new Arrow(arrowPoint.x, arrowPoint.y, fakeEnemy[0]));
+				// console.log(fakeArrows);
+				fakeArrows[i].shoot(fakeEnemy.pos);
+			}
+			pop();
+		}
+		else{
+			for(let j = 0; j<fakeArrows.length; j++){
+				fakeArrows[j].update();
+			}
+		}
 	}
 	else{
 		mode++;
@@ -159,7 +201,7 @@ function setupGame(){
 	player = new Player(width/2, height/2);
 	startGame();
 	mode++;
-	
+
 }
 
 function gameOn(){
@@ -195,19 +237,13 @@ function gameOver(){
 	}
 	player.score = 0;
 	mode = 1;
-	clearTimeout(levelDuration);
 	enemies.splice(0, enemies.length);
 	archers.splice(0, archers.length);
 	arrows.splice(0, arrows.length);
 	enemyArrows.splice(0, enemyArrows.length);
-	for(let s = 0; s < spawnPoints.length; s++){
-		clearTimeout(spawnPoints[s].interval);
-	}
-	spawnPoints.splice(0, spawnPoints.length);
-	clearTimeout(coinInterval);
 	coins.splice(0, coins.length);
 	lastWave = false;
-	level = 0;
+	wave = 0;
 }
 
 function logStats(){

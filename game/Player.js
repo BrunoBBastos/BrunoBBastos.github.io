@@ -20,10 +20,11 @@ class Player{
 
 	show(){
 		this.edges();
-		fill(this.col.x, this.col.y, this.col.z);
-		// circle(this.pos.x, this.pos.y, this.dmt);
-		let dir = createVector(mouseX - this.pos.x, mouseY-this.pos.y);
 		push();
+		fill(255, 150, 150, 150);
+		noStroke();
+		circle(this.pos.x, this.pos.y, this.dmt);
+		let dir = createVector(mouseX - this.pos.x, mouseY-this.pos.y);
 		imageMode(CENTER);
 		angleMode(RADIANS);
 		translate(this.pos.x, this.pos.y);

@@ -142,11 +142,14 @@ class Mage extends Enemy{
 		this.score = 50;
 		this.life = 7;
 		this.auraRadius = 200;
+		this.spawnP = new SpawnPoint(this.pos.x, this.pos.y, 5, Infinity, 3, 1, 0);
+		spawnPoints.push(this.spawnP);
 		this.type = 'mage';
 	}
 
 	behavior(){
 		this.aura();
+		this.spawnP.pos.set(this.pos);
 		let distance = dist(this.pos.x, this.pos.y, player.pos.x, player.pos.y);
 		if(distance > this.sightRadius){
 			this.update();
@@ -184,12 +187,15 @@ class Mage extends Enemy{
 }
 //////////////////////////////////////////////////////////////////
 class SpawnPoint{
-	constructor(x, y, t, s, a, m){
+	constructor(x, y, t, w, s, a, m){
 		this.pos = createVector(x, y);
 		this.minions = [s, a, m];
-		this.period = t;
-		this.interval = setInterval(this.spawnEnemies.bind(this), t*1000, this.minions[0],this.minions[1], this.minions[2]);
-		this.spawnEnemies(this.minions[0],this.minions[1], this.minions[2]);
+		this.period = t*1000;
+		this.manyWaves = w;
+		this.currentWave = this.manyWaves;
+		this.interval = 0;
+		this.start();
+		// this.spawnEnemies(this.minions[0],this.minions[1], this.minions[2]);
 	}
 
 	spawnEnemies(soldiersN, archersN, magesN){
@@ -202,11 +208,21 @@ class SpawnPoint{
 		for(let a = 0; a < magesN; a++){
 			enemies.push(new Mage(this.pos.x+random(-10, 10), this.pos.y+ random(-10, 10), 0.7));
 		}
+		this.currentWave--;
+		if(this.currentWave == 0){
+			this.stop();
+		}
+	}
+
+	start(){
+		this.interval = setInterval(this.spawnEnemies.bind(this), this.period, this.minions[0],this.minions[1], this.minions[2]);
+		this.currentWave = this.manyWaves;
 	}
 
 	resetInterval(){
-		clearTimeout(this.interval);
-		this.interval = setInterval(this.spawnEnemies.bind(this), this.period*1000, this.minions[0],this.minions[1], this.minions[2]);
+		clearInterval(this.interval);
+		this.interval = setInterval(this.spawnEnemies.bind(this), this.period, this.minions[0],this.minions[1], this.minions[2]);
+		this.currentWave = this.manyWaves;
 	}
 
 	addMinions(soldiersN, archersN, magesN){
@@ -217,13 +233,12 @@ class SpawnPoint{
 	}
 
 	stop(){
-		clearTimeout(this.interval);
+		clearInterval(this.interval);
 	}
-
 }	
 
+
 function intersects(from, bar){
-	// console.log("testing");
 	if(bar){
 			const x1 = bar.origin.x // Pontos da barreira
 			const y1 = bar.origin.y
