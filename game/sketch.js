@@ -101,6 +101,10 @@ function mouseReleased(){
 		case 3:
 		// Atira flecha
 		let arrowOrigin = createVector(mouseX, mouseY);
+		if(arrows[arrows.length -1].heading.x == arrowOrigin.x && arrows[arrows.length -1].heading.y == arrowOrigin.y){
+		 arrows.splice(arrows.length -1, 1);
+		 return;
+		}
 		arrows[arrows.length -1].shoot(arrowOrigin);
 		if(player.hasSpecialArrows) {
 			arrows[arrows.length -1].isSpecial = true;
