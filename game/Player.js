@@ -71,21 +71,34 @@ class Player{
 	class Arrow{
 		constructor(x, y, s, v){
 			this.shooter = s;
-			this.pos = createVector(this.shooter.pos.x, this.shooter.pos.y);
-			this.dmt = 1;
-			this.speed;
-			this.heading = createVector(x, y);
-			this.finalVector = createVector(0, 0);
-			this.origin = createVector(0, 0);
+			this.pos = createVector(this.shooter.pos.x, this.shooter.pos.y, 2);
+			this.vel = createVector(0, 0, 0);
+			this.acc = createVector(0, 0, 0);
+			this.dmt = 5;
+			this.heading = createVector(x, y, 0);
+			this.finalVector = createVector(0, 0, 0);
+			this.origin = createVector(0, 0, 0);
 			this.wasShot = false;
+			this.isFlying = true;
 			this.isSpecial = false;
 			this.col = createVector(220, 220, 200);
+			this.loadingTime = millis();
+			// if(this.shooter.type==)
 		}
 
 		update(){
 			if(this.wasShot){
-				this.pos.add(this.heading);
+				this.acc.add(gravity);
+				this.vel.add(this.acc);
+				this.pos.add(this.vel);
+				this.acc.set(0, 0, 0);
 				this.show();
+			}
+			if(this.pos.z<=0){
+				this.isFlying = false;
+			}
+			if(this.pos.x<-this.dmt || this.pos.x>width+this.dmt ||this.pos.y<-this.dmt || this.pos.y>height+this.dmt){
+				this.isFlying = false;
 			}
 		}
 
@@ -102,11 +115,18 @@ class Player{
 		}
 
 		shoot(o){
+			this.loadingTime = -this.loadingTime + millis();
+			this.loadingTime = map(this.loadingTime, 0, 1000, 7, 12, true);
+			console.log(this.loadingTime);
 			this.origin = o;
 			this.heading = this.heading.sub(this.origin);
-			this.heading.setMag(7);
+			this.heading.setMag(this.loadingTime);
 			this.pos = this.shooter.pos.copy();
+			this.pos.z+=this.loadingTime;
 			this.wasShot = true;
+			this.isFlying = true;
+			console.log(this.acc);
+			this.acc.add(this.heading);
 		}
 	}
 

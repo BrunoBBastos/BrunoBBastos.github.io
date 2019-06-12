@@ -59,9 +59,9 @@ function loadWaves(){
 
 
 		randomP = random(width);
-		spawnPoints.push(new SpawnPoint(randomP, 	  0, 3, 3, 2, 0, 0));
+		spawnPoints.push(new SpawnPoint(randomP, 	  0, 3, 3, 1, 0, 0));
 		randomP = random(width);
-		spawnPoints.push(new SpawnPoint(randomP, height, 3, 3, 2, 0, 0));
+		spawnPoints.push(new SpawnPoint(randomP, height, 3, 3, 1, 0, 0));
 		runTime = 15;
 		break;
 
@@ -72,9 +72,9 @@ function loadWaves(){
 		spawnPoints[0].resetInterval(); 
 		spawnPoints[1].resetInterval(); 
 		randomP = random(height);
-		spawnPoints.push(new SpawnPoint(0, 	   randomP, 5, 3, 2, 0, 0));
+		spawnPoints.push(new SpawnPoint(0, 	   randomP, 5, 3, 1, 0, 0));
 		randomP = random(height);
-		spawnPoints.push(new SpawnPoint(width, randomP, 5, 3, 2, 0, 0));
+		spawnPoints.push(new SpawnPoint(width, randomP, 5, 3, 1, 0, 0));
 
 		break;
 

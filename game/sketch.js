@@ -8,6 +8,7 @@ let coins = [];
 let barriers =[];
 let fakeEnemy = [];
 let fakeArrows = [];
+let gravity;
 let money = 0;
 let highScore = 0;
 let level = 0;
@@ -30,6 +31,7 @@ function setup() {
 	createCanvas(800, 600);
 	loadImgs();
 	fakeArrows[1000] = 1;
+	gravity = createVector(0, 0, -0.007);
 }
 
 function draw() {
@@ -43,7 +45,7 @@ function updateElements(){
 		b.show();
 	}
 	// Deleta flechas se passarem dos limites da tela
-	for(let a = 0; a < arrows.length; a++){
+	/*for(let a = 0; a < arrows.length; a++){
 		if(arrows[a].wasShot){
 			arrows[a].update();
 			if(arrows[a].pos.x<-arrows[a].dmt || arrows[a].pos.x>width+arrows[a].dmt ||arrows[a].pos.y<-arrows[a].dmt || arrows[a].pos.y>height+arrows[a].dmt){
@@ -57,6 +59,18 @@ function updateElements(){
 			if(enemyArrows[i].pos.x<-enemyArrows[i].dmt || enemyArrows[i].pos.x>width+enemyArrows[i].dmt ||enemyArrows[i].pos.y<-enemyArrows[i].dmt || enemyArrows[i].pos.y>height+enemyArrows[i].dmt){
 				enemyArrows.splice(i, 1);
 			}
+		}
+	}*/
+	for(let i = 0; i < arrows.length; i++){
+		if(arrows[i].wasShot){
+			arrows[i].update();
+			if(!arrows[i].isFlying) arrows.splice(i, 1);
+		}
+	}
+	for(let j = 0; j < enemyArrows.length; j++){
+		if(enemyArrows[j].wasShot){
+			enemyArrows[j].update();
+			if(!enemyArrows[j].isFlying) enemyArrows.splice(j, 1);
 		}
 	}
 	// Ordena inimigos a adotarem seu comportamento
@@ -84,6 +98,7 @@ function mousePressed(){
 		case 3:
 		// Prepara flecha
 		arrows.push(new Arrow(mouseX, mouseY, player));
+		console.log(arrows);
 		break;
 	}
 }
@@ -101,10 +116,10 @@ function mouseReleased(){
 		case 3:
 		// Atira flecha
 		let arrowOrigin = createVector(mouseX, mouseY);
-		if(arrows[arrows.length -1].heading.x == arrowOrigin.x && arrows[arrows.length -1].heading.y == arrowOrigin.y){
+		/*if(arrows[arrows.length -1].heading.x == arrowOrigin.x && arrows[arrows.length -1].heading.y == arrowOrigin.y){
 		 arrows.splice(arrows.length -1, 1);
 		 return;
-		}
+		}*/
 		arrows[arrows.length -1].shoot(arrowOrigin);
 		if(player.hasSpecialArrows) {
 			arrows[arrows.length -1].isSpecial = true;
