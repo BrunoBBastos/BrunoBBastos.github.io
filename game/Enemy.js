@@ -57,7 +57,7 @@ class Enemy{
 	}
 
 	show(){
-		fill(150);
+		fill(200);
 		rectMode(CENTER);
 		rect(this.pos.x, this.pos.y, this.dmt, this.dmt);
 	}
@@ -82,13 +82,17 @@ class Enemy{
 
 				}		
 			}
-					this.direction.set(objective.sub(startingP));
+			this.direction.set(objective.sub(startingP));
 		}
 		else{
 			objective = objective.sub(startingP);
 			this.direction.set(objective);
-			
 		}
+	}
+
+	die(){
+		player.score+=this.score;
+		player.money+=this.score;
 	}
 }
 
@@ -140,14 +144,17 @@ class Mage extends Enemy{
 		this.lastTimeStamp = 0;
 		this.attackSpeed = 3000;
 		this.score = 50;
-		this.life = 7;
+		this.life = 5;
 		this.auraRadius = 200;
 		this.spawnP = new SpawnPoint(this.pos.x, this.pos.y, 5, Infinity, 3, 1, 0);
 		spawnPoints.push(this.spawnP);
+		this.col = 0;
 		this.type = 'mage';
 	}
 
 	behavior(){
+		this.col = map(this.life, 0, 5, 255, 0, true);
+
 		this.aura();
 		this.spawnP.pos.set(this.pos);
 		let distance = dist(this.pos.x, this.pos.y, player.pos.x, player.pos.y);
@@ -179,9 +186,14 @@ class Mage extends Enemy{
 	}
 
 	show(){
-		fill(0);
+		fill(this.col);
 		rectMode(CENTER);
 		rect(this.pos.x, this.pos.y, this.dmt, this.dmt);
+	}
+	die(){
+		player.score += this.score;
+		player.money += this.score;
+		this.spawnP.stop();
 	}
 
 }

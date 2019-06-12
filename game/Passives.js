@@ -62,6 +62,7 @@ function loadWaves(){
 		spawnPoints.push(new SpawnPoint(randomP, 	  0, 3, 3, 1, 0, 0));
 		randomP = random(width);
 		spawnPoints.push(new SpawnPoint(randomP, height, 3, 3, 1, 0, 0));
+
 		runTime = 15;
 		break;
 
@@ -135,7 +136,6 @@ function operationMode(){
 
 		case 5:
 		clearTimeout(levelDuration);
-
 		for(let s = 0; s < spawnPoints.length; s++){
 			clearTimeout(spawnPoints[s].interval);
 		}
@@ -208,6 +208,13 @@ function gameOn(){
 	updateScreen();
 	detectCollisions();
 	updateElements();
+	if(lastWave){
+
+		if(enemies.length == 0){
+			console.log("VICTORY!");
+			levelResult = true;
+			mode = 5;		}
+	}
 }
 
 function startGame(){
@@ -229,6 +236,10 @@ function updateScreen(){
 	textFont('Helvetica');
 	text(player.money, width/2, height/16);
 	pop();
+}
+
+function victory(){
+
 }
 
 function gameOver(){
@@ -264,7 +275,8 @@ function logStats(){
 	textSize(18);
 	fill(0);
 	textAlign(CENTER);
-	text("- Game Over -\nPress 'Esc' to continue", width/2, height/2);
+	if(levelResult)	text("- Victory! -\nPress 'Esc' to continue", width/2, height/2);
+	else text("- Game Over! -\nPress 'Esc' to continue", width/2, height/2);
 	pop();
 	enemiesK = 0;
 	coinsPicked = 0;

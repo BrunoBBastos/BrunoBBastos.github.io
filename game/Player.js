@@ -117,7 +117,6 @@ class Player{
 		shoot(o){
 			this.loadingTime = -this.loadingTime + millis();
 			this.loadingTime = map(this.loadingTime, 0, 1000, 7, 12, true);
-			console.log(this.loadingTime);
 			this.origin = o;
 			this.heading = this.heading.sub(this.origin);
 			this.heading.setMag(this.loadingTime);
@@ -125,7 +124,6 @@ class Player{
 			this.pos.z+=this.loadingTime;
 			this.wasShot = true;
 			this.isFlying = true;
-			console.log(this.acc);
 			this.acc.add(this.heading);
 		}
 	}
@@ -165,7 +163,6 @@ class Player{
 			S = S.sub(xy);
 			distance = s.dmt/2 - distance;
 			S.setMag(distance);
-		// console.log(S);
 		s.pos.add(S);
 	}
 }

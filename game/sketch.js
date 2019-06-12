@@ -18,6 +18,7 @@ let mode = 0;
 let enemiesK = 0, coinsPicked = 0, arrowsFired = 0;
 let wave = 0;
 let lastWave = false;
+let levelResult;
 
 let playerImg;
 let ptStr;
@@ -44,23 +45,6 @@ function updateElements(){
 	for(let b of barriers){
 		b.show();
 	}
-	// Deleta flechas se passarem dos limites da tela
-	/*for(let a = 0; a < arrows.length; a++){
-		if(arrows[a].wasShot){
-			arrows[a].update();
-			if(arrows[a].pos.x<-arrows[a].dmt || arrows[a].pos.x>width+arrows[a].dmt ||arrows[a].pos.y<-arrows[a].dmt || arrows[a].pos.y>height+arrows[a].dmt){
-				arrows.splice(a, 1);
-			}
-		}
-	}
-	for(let i = 0; i < enemyArrows.length; i++){
-		if(enemyArrows[i].wasShot){
-			enemyArrows[i].update();
-			if(enemyArrows[i].pos.x<-enemyArrows[i].dmt || enemyArrows[i].pos.x>width+enemyArrows[i].dmt ||enemyArrows[i].pos.y<-enemyArrows[i].dmt || enemyArrows[i].pos.y>height+enemyArrows[i].dmt){
-				enemyArrows.splice(i, 1);
-			}
-		}
-	}*/
 	for(let i = 0; i < arrows.length; i++){
 		if(arrows[i].wasShot){
 			arrows[i].update();
@@ -140,8 +124,7 @@ function detectCollisions(){
 			if(circleRectCollision(arrows[a], enemies[e])){
 				enemies[e].life--;
 				if(enemies[e].life <= 0){
-					player.scorePoints(enemies[e].score);
-					
+					enemies[e].die();
 					enemies.splice(e, 1);
 				}
 				if(!arrows[a].isSpecial) {
@@ -161,6 +144,7 @@ function detectCollisions(){
 		if(circleCircleCollision(enemyArrows[a], player)){
 			
 			console.log("Game Over");
+			levelResult = false;
 			mode = 5;
 			break;
 		}
@@ -168,8 +152,8 @@ function detectCollisions(){
 	//testa se o inimigo alcança o player
 	for(let e = 0; e < enemies.length; e++){
 		if(circleRectCollision(player, enemies[e])){
-			// noLoop();
 			console.log("Game Over");
+			levelResult = false;
 			mode = 5;
 			break;
 		}
