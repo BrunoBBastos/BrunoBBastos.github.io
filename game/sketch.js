@@ -145,7 +145,7 @@ function gameOn(){
 			levelResult = true;
 			level++;
 			if(level == 5){
-				
+
 			}
 			mode = 5;		}
 	}
@@ -169,7 +169,7 @@ function logStats(){
 	textSize(18);
 	fill(0);
 	textAlign(CENTER);
-	if(levelResult)	text("- Victory! -\nPress 'Esc' to continue", width/2, height/2);
+	if(levelResult)	text("Level " + (level) + "\n- Victory! -\nPress 'Esc' to continue", width/2, height/2);
 	else text("- Game Over! -\nPress 'Esc' to continue", width/2, height/2);
 	pop();
 	enemiesK = 0;
