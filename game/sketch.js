@@ -144,6 +144,9 @@ function gameOn(){
 			console.log("VICTORY!");
 			levelResult = true;
 			level++;
+			if(level == 5){
+				
+			}
 			mode = 5;		}
 	}
 }
