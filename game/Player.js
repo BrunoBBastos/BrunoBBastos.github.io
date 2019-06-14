@@ -35,7 +35,7 @@ class Player{
 			imageMode(CENTER);
 			angleMode(RADIANS);
 			translate(this.pos.x, this.pos.y);
-			rotate(dir.heading()+HALF_PI);
+			rotate(dir.heading());
 			image(playerImg, 0, 0);
 			pop();
 		}
@@ -83,7 +83,6 @@ class Player{
 			this.isSpecial = false;
 			this.col = createVector(220, 220, 200);
 			this.loadingTime = millis();
-			// if(this.shooter.type==)
 		}
 
 		update(){
@@ -108,9 +107,9 @@ class Player{
 			translate(this.pos.x, this.pos.y);
 			let dir = this.heading;
 			angleMode(RADIANS);
-			rotate(dir.heading()+HALF_PI);
-			line(0, 12, 0, 27);
-			triangle(-4, 12, 0, 0, 4, 12);
+			rotate(dir.heading());
+			line(0, 0, -15, 0);
+			triangle(-0, 4, 12, 0, 0, -4);
 			pop();
 		}
 
@@ -128,41 +127,4 @@ class Player{
 		}
 	}
 
-	function wall(s, bar) {
-
-		let S = s.pos.copy(),
-		P = bar.origin.copy(),
-		Q = bar.ending.copy();
-
-		let PS = S.sub(P);
-		let PQ = Q.sub(P);
-		let dot = PS.dot(PQ);
-		let PQsq = PQ.magSq();
-		let param = -1;
-		if (PQsq != 0) param = dot / PQsq;
-
-		let xx, yy;
-
-		if (param < 0) {
-			xx = bar.origin.x;
-			yy = bar.origin.y;
-		} else if (param > 1) {
-			xx = bar.ending.x;
-			yy = bar.ending.y;
-		} else {
-			xx = bar.origin.x + param * PQ.x;
-			yy = bar.origin.y + param * PQ.y;
-		}
-
-		let dx = s.pos.x - xx;
-		let dy = s.pos.y - yy;
-		let distance = sqrt(dx * dx + dy * dy);
-		if(distance < s.dmt/2){
-			xy = createVector(xx, yy);
-			S = s.pos.copy();
-			S = S.sub(xy);
-			distance = s.dmt/2 - distance;
-			S.setMag(distance);
-		s.pos.add(S);
-	}
-}
+	

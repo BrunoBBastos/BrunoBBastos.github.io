@@ -142,11 +142,11 @@ class Mage extends Enemy{
 		super(x, y, v, d = 20);
 		this.sightRadius = 400;
 		this.lastTimeStamp = 0;
-		this.attackSpeed = 3000;
+		this.attackSpeed = 2000;
 		this.score = 50;
 		this.life = 5;
-		this.auraRadius = 200;
-		this.spawnP = new SpawnPoint(this.pos.x, this.pos.y, 5, Infinity, 3, 1, 0);
+		this.auraRadius = 300;
+		this.spawnP = new SpawnPoint(this.pos.x, this.pos.y, 5, Infinity, 4, 1, 0);
 		spawnPoints.push(this.spawnP);
 		this.col = 0;
 		this.type = 'mage';
@@ -248,7 +248,6 @@ class SpawnPoint{
 		clearInterval(this.interval);
 	}
 }	
-
 
 function intersects(from, bar){
 	if(bar){
