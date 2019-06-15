@@ -20,6 +20,7 @@ let enemiesK = 0, coinsPicked = 0, arrowsFired = 0;
 let wave = 0;
 let lastWave = false;
 let levelResult;
+let playButton, levelSelButton;
 
 let playerImg;
 let ptStr;
@@ -32,6 +33,7 @@ function preload() {
 
 function setup() {
 	createCanvas(800, 600);
+	createButtons();
 	fakeArrows[1000] = 1;													// REFATORAR A APRESENTAÇÃO
 	gravity = createVector(0, 0, -0.007);
 }
@@ -73,6 +75,10 @@ function operationMode() {
 			clearTimeout(coinInterval);
 			logStats();
 			noLoop();
+			break;
+
+		case 6:
+			levelSelect();
 			break;
 	}
 }
@@ -119,8 +125,9 @@ function menu() {
 	textStyle(BOLD);
 	textAlign(CENTER, CENTER);
 	textFont(font);
-	text("Score: " + totalScore, width / 2, height / 4);
-	text("Clique para Jogar!", width / 2, height / 2);
+	// text("Score: " + totalScore, width / 2, height / 4);
+	playButton.show();
+	levelSelButton.show();
 	textSize(28);
 	text("Controles: \nMover: w, a, s, d\nAtirar: clique arraste e solte\nComprar Flecha Magica: barra de espacos", width / 2, height * 3 / 4);
 	pop();
@@ -203,4 +210,79 @@ function endGame() {
 	coins.splice(0, coins.length);
 	lastWave = false;
 	wave = 0;
+}
+
+class Button {
+	constructor(x, y, m, c, s) {
+		this.pos = createVector(x, y);
+		this.screen = m;
+		this.content = c;
+		this.fSize = s;
+		this.h = this.fSize + 20;
+		this.bbox = font.textBounds(this.content, this.pos.x, this.pos.y, this.fSize);
+	}
+
+	show() {
+		push();
+		rectMode(CENTER);
+		textAlign(CENTER, CENTER);
+		if (this.detectsMouse()) {
+			strokeWeight(7);
+			stroke(255, 168, 18);
+		}
+		textFont(font);
+		textSize(this.fSize);
+		text(this.content, this.pos.x, this.pos.y);
+		noFill();
+		// rect(this.pos.x, this.pos.y, width, this.fSize + 20);
+		pop();
+	}
+
+	detectsMouse() {
+		// Recebe um objeto círculo e outro retangular
+		// Pontos de teste
+		let testX = mouseX,
+			testY = mouseY;
+		// Testa se o círculo está à direita ou à esquerda do retângulo
+		// if (mouseX < this.pos.x - this.bbox.w / 2) testX = this.bbox.x - this.bbox.w / 2;
+		// else if (mouseX > this.bbox.x + this.bbox.w / 2) testX = this.bbox.x + this.bbox.w / 2;
+		// Testa se o círculo está acima ou abaixo do retângulo
+		if (mouseY < this.pos.y - this.h / 2) testY = this.pos.y - this.h / 2;
+		else if (mouseY > this.pos.y + this.h / 2) testY = this.pos.y + this.h / 2;
+		// Calcula catetos para encontrar a hipotenusa (distância)
+		let distX = mouseX - testX;
+		let distY = mouseY - testY;
+		let distance = sqrt((distX * distX) + (distY * distY));
+		// Retorna V ou F se intersectar
+		return (distance <= 0);
+	}
+
+}
+
+function createButtons() {
+	playButton = new Button(width / 2, height / 2, 1, "Clique para Jogar!", 48);
+	levelSelButton = new Button(width / 2, height / 4, 1, "Selecionar Level", 48);
+lvl1Button = new Button(width/2, height* 2/7, 6, "Level 1", 48);
+lvl2Button = new Button(width/2, height * 3/7, 6, "Level 2", 48);
+lvl3Button = new Button(width/2, height * 4/7, 6, "Level 3", 48);
+lvl4Button = new Button(width/2, height * 5/7, 6, "Level 4", 48);
+lvl5Button = new Button(width/2, height * 6/7, 6, "Level 5", 48);
+}
+
+function levelSelect(){
+	background(0);
+	push();
+	textSize(48);
+	fill(130);
+	textStyle(BOLD);
+	textAlign(CENTER, CENTER);
+	textFont(font);
+	text("Score: " + totalScore, width / 2, height / 7);
+	lvl1Button.show();
+	lvl2Button.show();
+	lvl3Button.show();
+	lvl4Button.show();
+	lvl5Button.show();
+	textSize(28);
+	pop();
 }
