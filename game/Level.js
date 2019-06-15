@@ -4,6 +4,7 @@ function manageLevel() {
         loadLevel();
         levelDuration = setTimeout(manageLevel, runTime * 1000);
     }
+    else clearTimeout(coinInterval);
 }
 
 function loadLevel() {
@@ -221,8 +222,7 @@ function loadLevel() {
                     console.log("3rd Wave");
                     spawnPoints[0].manyWaves = 1;
                     spawnPoints[0].addMinions(0, 0, 1);
-                    // spawnPoints[1].addMinions(1, 0, 0);
-                    returnTime = 20;
+                    
                     lastWave = true;
                     break;
             }

@@ -78,7 +78,7 @@ function updateScreen(){
 	fill(255, 168, 18);
 	textStyle(BOLD);
 	textAlign(CENTER, CENTER);
-	textFont('Helvetica');
+	textFont(font);
 	text(player.money, width/2, height/16);
 	pop();
 }
@@ -247,6 +247,7 @@ function detectCollisions(){
 	for(let c = 0; c < coins.length; c++){
 		if(circleCircleCollision(player, coins[c])){
 			coins.splice(c, 1);
+			currentScore += 3;
 			player.scorePoints(3);
 			coinsPicked++;
 			continue;

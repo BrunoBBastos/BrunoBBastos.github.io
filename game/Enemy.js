@@ -91,7 +91,7 @@ class Enemy{
 	}
 
 	die(){
-		player.score+=this.score;
+		currentScore+=this.score;
 		player.money+=this.score;
 	}
 }
@@ -191,7 +191,7 @@ class Mage extends Enemy{
 		rect(this.pos.x, this.pos.y, this.dmt, this.dmt);
 	}
 	die(){
-		player.score += this.score;
+		currentScore += this.score;
 		player.money += this.score;
 		this.spawnP.stop();
 	}

@@ -6,7 +6,6 @@ class Player{
 		this.dmt = d;
 		this.col = createVector(180, 200, 255);
 		this.money = 0;
-		this.score = 0;
 		this.hasSpecialArrows = 0;
 	}
 
@@ -56,7 +55,6 @@ class Player{
 		}
 
 		scorePoints(s){
-			this.score+=s;
 			this.money+=s;
 		}
 
@@ -108,8 +106,8 @@ class Player{
 			let dir = this.heading;
 			angleMode(RADIANS);
 			rotate(dir.heading());
-			line(0, 0, -15, 0);
-			triangle(-0, 4, 12, 0, 0, -4);
+			triangle(-12, 4, -12, -4, 0, 0);
+			line(-27, 0, -12, 0);
 			pop();
 		}
 
