@@ -28,11 +28,11 @@ let ptStr;
 let font;
 
 function preload() {
-	font = loadFont('./data/manaspc.ttf'); //
-	playerImg[1] = loadImage("./data/player1.png");
-	playerImg[2] = loadImage("./data/player2.png");
-	grassImg = loadImage("./data/grassImg.png");
-	archerImg[1] = loadImage("./data/archer1.png");
+	font = loadFont('/data/manaspc.ttf'); //
+	playerImg[1] = loadImage("/data/player1.png");
+	playerImg[2] = loadImage("/data/player2.png");
+	grassImg = loadImage("/data/grassImg.png");
+	archerImg[1] = loadImage("/data/archer1.png");
 	archerImg[2] = loadImage("./data/archer2.png");
 	bossImg[1] = loadImage("./data/boss1.png");
 	bossImg[2] = loadImage("./data/boss2.png");
