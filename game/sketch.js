@@ -33,11 +33,11 @@ function preload() {
 	playerImg[2] = loadImage("/data/player2.png");
 	grassImg = loadImage("/data/grassImg.png");
 	archerImg[1] = loadImage("/data/archer1.png");
-	archerImg[2] = loadImage("./data/archer2.png");
-	bossImg[1] = loadImage("./data/boss1.png");
-	bossImg[2] = loadImage("./data/boss2.png");
-	soldierImg[1] = loadImage("./data/soldier1.png");
-	soldierImg[2] = loadImage("./data/soldier2.png");
+	archerImg[2] = loadImage("/data/archer2.png");
+	bossImg[1] = loadImage("/data/boss1.png");
+	bossImg[2] = loadImage("/data/boss2.png");
+	soldierImg[1] = loadImage("/data/soldier1.png");
+	soldierImg[2] = loadImage("/data/soldier2.png");
 }
 
 function setup() {
