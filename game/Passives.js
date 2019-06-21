@@ -71,7 +71,9 @@ function gibMoney() {
 }
 
 function updateScreen() {
-	background(180, 255, 220);
+	// background(180, 255, 220);
+	clear();
+	image(grassImg, 0, 0, width, height);
 	push();
 	textSize(22);
 	fill(255, 168, 18);

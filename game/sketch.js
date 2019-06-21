@@ -22,13 +22,22 @@ let lastWave = false;
 let levelResult;
 let playButton, levelSelButton;
 
-let playerImg;
+let playerImg = [], grassImg;
+let archerImg = [], bossImg = [], soldierImg = [];
 let ptStr;
 let font;
 
 function preload() {
-	font = loadFont('manaspc.ttf'); //
-	playerImg = loadImage("playerImg.png");
+	font = loadFont('./data/manaspc.ttf'); //
+	playerImg[1] = loadImage("./data/player1.png");
+	playerImg[2] = loadImage("./data/player2.png");
+	grassImg = loadImage("./data/grassImg.png");
+	archerImg[1] = loadImage("./data/archer1.png");
+	archerImg[2] = loadImage("./data/archer2.png");
+	bossImg[1] = loadImage("./data/boss1.png");
+	bossImg[2] = loadImage("./data/boss2.png");
+	soldierImg[1] = loadImage("./data/soldier1.png");
+	soldierImg[2] = loadImage("./data/soldier2.png");
 }
 
 function setup() {
@@ -85,32 +94,19 @@ function operationMode() {
 
 function presentation() {															// REFATORAR
 
-	if (millis() < 1000) {
+	if (millis() < 4000) {
 		background(0);
-		if (fakeArrows.length == 1001) {
-			fakeArrows.splice(0, fakeArrows.length);
-			push();
-			textSize(80);
-			textFont(font);
-			textStyle(BOLD);
-			textAlign(CENTER, CENTER);
-			ptStr = font.textToPoints("Archer", 200, height / 2);
-			stroke(255);
-			strokeWeight(5);
-			fakeEnemy.push(new Enemy(10, 10, 0));
-			for (let i = 0; i < ptStr.length; i++) {
-				let arrowPoint = ptStr[i];
-				point(arrowPoint.x, arrowPoint.y);
-				fakeArrows.push(new Arrow(arrowPoint.x, arrowPoint.y, fakeEnemy[0]));
-				fakeArrows[i].shoot(fakeEnemy.pos);
-			}
-			pop();
-		}
-		else {
-			for (let j = 0; j < fakeArrows.length; j++) {
-				fakeArrows[j].update();
-			}
-		}
+		push();
+		fill(255, 211, 0);
+		textSize(80);
+		textFont(font);
+		textStyle(BOLD);
+		textAlign(CENTER, CENTER);
+		// strokeWeight(7);
+		stroke(255, 211, 0);
+		text("DRAW\nARROW", width/2, height / 2);
+
+		pop();
 	}
 	else {
 		mode++;
@@ -168,7 +164,7 @@ function logStats() {
 
 	push();
 	textSize(18);
-	fill(220, 20, 60);
+	fill(0);
 	textStyle(BOLD);
 	textFont('Helvetica');
 	textAlign(RIGHT, CENTER);
@@ -228,7 +224,7 @@ class Button {
 		textAlign(CENTER, CENTER);
 		if (this.detectsMouse()) {
 			strokeWeight(7);
-			stroke(255, 168, 18);
+			stroke(255, 211, 0);
 		}
 		textFont(font);
 		textSize(this.fSize);
@@ -262,14 +258,14 @@ class Button {
 function createButtons() {
 	playButton = new Button(width / 2, height / 2, 1, "Clique para Jogar!", 48);
 	levelSelButton = new Button(width / 2, height / 4, 1, "Selecionar Level", 48);
-lvl1Button = new Button(width/2, height* 2/7, 6, "Level 1", 48);
-lvl2Button = new Button(width/2, height * 3/7, 6, "Level 2", 48);
-lvl3Button = new Button(width/2, height * 4/7, 6, "Level 3", 48);
-lvl4Button = new Button(width/2, height * 5/7, 6, "Level 4", 48);
-lvl5Button = new Button(width/2, height * 6/7, 6, "Level 5", 48);
+	lvl1Button = new Button(width / 2, height * 2 / 7, 6, "Level 1", 48);
+	lvl2Button = new Button(width / 2, height * 3 / 7, 6, "Level 2", 48);
+	lvl3Button = new Button(width / 2, height * 4 / 7, 6, "Level 3", 48);
+	lvl4Button = new Button(width / 2, height * 5 / 7, 6, "Level 4", 48);
+	lvl5Button = new Button(width / 2, height * 6 / 7, 6, "Level 5", 48);
 }
 
-function levelSelect(){
+function levelSelect() {
 	background(0);
 	push();
 	textSize(48);
