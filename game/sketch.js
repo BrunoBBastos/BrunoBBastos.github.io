@@ -28,16 +28,16 @@ let ptStr;
 let font;
 
 function preload() {
-	font = loadFont('/data/manaspc.ttf'); //
-	playerImg[1] = loadImage("/data/player1.png");
-	playerImg[2] = loadImage("/data/player2.png");
-	grassImg = loadImage("/data/grassImg.png");
-	archerImg[1] = loadImage("/data/archer1.png");
-	archerImg[2] = loadImage("/data/archer2.png");
-	bossImg[1] = loadImage("/data/boss1.png");
-	bossImg[2] = loadImage("/data/boss2.png");
-	soldierImg[1] = loadImage("/data/soldier1.png");
-	soldierImg[2] = loadImage("/data/soldier2.png");
+	font = loadFont('manaspc.ttf'); //
+	playerImg[1] = loadImage("player1.png");
+	playerImg[2] = loadImage("player2.png");
+	grassImg = loadImage("grassImg.png");
+	archerImg[1] = loadImage("archer1.png");
+	archerImg[2] = loadImage("archer2.png");
+	bossImg[1] = loadImage("boss1.png");
+	bossImg[2] = loadImage("boss2.png");
+	soldierImg[1] = loadImage("soldier1.png");
+	soldierImg[2] = loadImage("soldier2.png");
 }
 
 function setup() {
@@ -102,7 +102,6 @@ function presentation() {															// REFATORAR
 		textFont(font);
 		textStyle(BOLD);
 		textAlign(CENTER, CENTER);
-		// strokeWeight(7);
 		stroke(255, 211, 0);
 		text("DRAW\nARROW", width/2, height / 2);
 
@@ -121,7 +120,6 @@ function menu() {
 	textStyle(BOLD);
 	textAlign(CENTER, CENTER);
 	textFont(font);
-	// text("Score: " + totalScore, width / 2, height / 4);
 	playButton.show();
 	levelSelButton.show();
 	textSize(28);
@@ -190,7 +188,6 @@ function logStats() {
 }
 
 function endGame() {
-	// if (currentScore > score[level]) score[level] = currentScore;
 	totalScore = 0;
 	for (let i = 0; i < score.length; i++) {
 		totalScore += score[i];
@@ -230,7 +227,6 @@ class Button {
 		textSize(this.fSize);
 		text(this.content, this.pos.x, this.pos.y);
 		noFill();
-		// rect(this.pos.x, this.pos.y, width, this.fSize + 20);
 		pop();
 	}
 
