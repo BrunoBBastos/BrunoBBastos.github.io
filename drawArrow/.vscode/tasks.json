@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "build carai",
+        "type": "shell",
+        "command": "g++",
+        "args": ["-g", "-o", "helloworld", "carai.cpp"],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        }
+      }
+    ]
+  }
