@@ -1,5 +1,6 @@
 // Variáveis Globais
 let player, enemy;
+let popUps = [];
 let grid = [];
 let mode = 0;
 let actives = []; // array to hold active pieces on the table
@@ -9,7 +10,7 @@ let currentActive;
 let rows, cols, sqSides = 30;
 
 function setup() {
-  createCanvas(601, 601);
+  createCanvas(801, 801);
   
   rectMode(CENTER);
   ellipseMode(CENTER);
@@ -42,31 +43,27 @@ function manageMode(){
 
 function setupLevel(){
 
-  rows = floor(width / sqSides);
-  cols = floor(height / sqSides);
-  for(let c = 0; c < cols; c++){
-    for(let r = 0; r < rows; r++){
+  rows = 16;
+  cols = 14;
+
+  for(let r = 0; r < rows; r++){
+    grid[r] = [];
+    for(let c = 0; c < cols; c++){
       let tile = new Tile(r, c);
-      if(!floor(random(0, 21))) tile.isOccupied = true;
-      grid.push(tile);
+      grid[r].push(tile);
     }
   }
 
-  let layout = [];
-  for(let i = 0; i < rows; i++){
-    for(let j = 0; j < cols; j++){
-     layout[j + i * cols] = (i == 0 || j == 0 || i == rows -1 || j == cols -1);
-   }
- }
- loadLayout(layout);
+  setupLayouts();
+  loadLayout(JpLayout);
 
- currentTurn = 1;
- currentActive = 0;
- mode++;
+  currentTurn = 1;
+  currentActive = 0;
+  mode++;
 }
 
 function setupPlayers(){
-  player = new Player(7, 7);
+  player = new Player(4, 3);
   enemy = new Enemy(10, 10);
   actives.push(player);
   actives.push(enemy);
@@ -77,14 +74,15 @@ function setupPlayers(){
 function runMatch(){
   background(230);
 
-  for(t of grid){
-    t.show();
+  for(r of grid){
+    for(t of r){
+      t.show();
+    }
   }
 
   for(a of actives){
-    a.show();
-  }
-
+   a.show();
+ }
   actives[currentActive].turn();
 
 }
