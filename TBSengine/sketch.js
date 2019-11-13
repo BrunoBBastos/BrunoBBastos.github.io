@@ -2,6 +2,7 @@
 let player, enemy;
 let popUps = [];
 let grid = [];
+let buttons = [];
 let mode = 0;
 let actives = []; // array to hold active pieces on the table
 let currentTurn;
@@ -57,6 +58,12 @@ function setupLevel(){
   setupLayouts();
   loadLayout(JpLayout);
 
+  buttons.push(new UIButton(50, 16 * sqSides + 50, "Confirm"));
+  buttons.push(new UIButton(150, 16 * sqSides + 50, "End Turn"));
+  buttons.push(new UIButton(250, 16 * sqSides + 50, "Whatever"));
+  buttons.push(new UIButton(350, 16 * sqSides + 50, "Paulo Ricardo"));
+
+
   currentTurn = 1;
   currentActive = 0;
   mode++;
@@ -83,7 +90,11 @@ function runMatch(){
   for(a of actives){
    a.show();
  }
-  actives[currentActive].turn();
+ actives[currentActive].turn();
+
+ for(b of buttons){
+  b.show();
+}
 
 }
 

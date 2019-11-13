@@ -53,43 +53,38 @@ function selectTile(x, y){
 }
 
 function mouseClicked(){
-		selectTile(mouseX, mouseY);
+	if(mouseX <= cols * sqSides && mouseY < rows * sqSides) selectTile(mouseX, mouseY);
+	else{
+		for(b of buttons){
+			if(b.checkClick(mouseX, mouseY)) break;
+		}
 	}
-
-function popUpSelf(actv){
-	popUps.push(new popUp(actv));
 }
 
-function clearPopUp(){
-	popUps.splice(0, 1);
-}
-
-class popUp{
-	constructor(actv){
-		this.actv = actv;
-		this.loc = createVector(this.actv.loc.x, this.actv.loc.y);
+class UIButton{
+	constructor(x, y, txt){
+		this.loc = createVector(x, y);
+		this.txt = txt;
+		this.w = 100;
+		this.h = 50;
 	}
 
 	show(){
 		push();
-
-		fill(255, 180);
-		rect(this.loc.x, this.loc.y, 300, 100);
+		fill(255);
+		rect(this.loc.x, this.loc.y, this.w, this.h);
+		fill(0);
+		textSize(16);
 		textAlign(CENTER, CENTER);
-		text("Attack!", this.loc.x, this.loc.y);
+		text(this.txt, this.loc.x, this.loc.y);
 		pop();
 	}
 
-	resolve(x, y){
-		if(x > this.loc.x - 150 && x < this.loc.x + 150){
-			if(y > this.loc.y - 50 && y < this.loc.y + 50){
-				alert();
-				clearPopUp();
+	checkClick(x, y){
+		if(x > this.loc.x - this.w / 2 && x < this.loc.x + this.w / 2){
+			if(y > this.loc.y - this.h / 2 && y < this.loc.y + this.h / 2){
+				print(this.txt);
 			}
 		}
-		else{
-			clearPopUp();
-		}
 	}
-
 }
