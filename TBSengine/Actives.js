@@ -67,7 +67,7 @@ class Active{
 
   interact(other){
     if(other ==  this){
-     
+
     }
     else{
       this.attack(other);
@@ -95,21 +95,47 @@ class Enemy extends Active{
 }
 
 function lineOfSight(origin, target){
-  push();
-  strokeWeight(5)
-  stroke(255, 0, 0);
-  line(origin.x - sqSides/2, origin.y - sqSides/2, target.x - sqSides/2, target.y - sqSides/2);
-  pop();
+  // Put tiles that may block the LOS in an array 
   let blockers = [];
   blockers = scanBlockers(origin, target);
-  let clearLOS = false;
-  for(let i = 0; i < blockers.length; i++){
-    clearLOS |= separatedAxisT(origin, target, blockers[i]);
-    print(clearLOS);
+  // Get the vertices of both tiles
+  let originPoints = [], targetPoints = [];
+  originPoints = getPoints(origin);
+  targetPoints = getPoints(target);
+  // Assume the LOS is blocked 
+  let clearLOS;
+
+
+  for(let j = 0; j < originPoints.length; j++){
+    for(let k = 0; k < targetPoints.length; k++){
+    clearLOS = true;
+      for(let i = 0; i < blockers.length; i++){
+
+
+
+        clearLOS &= separatedAxisT(originPoints[j], targetPoints[k], blockers[i]);
+        if(!clearLOS) break;
+
+
+
+      }
+      if(clearLOS) break;
+    }
+      if(clearLOS) break;
   }
   if(clearLOS || blockers.length == 0) print("able to attack");
   else print("final line of sight blocked!");
 }
+
+function getPoints(tile){
+  let ptArr = [];
+  ptArr.push(createVector(tile.x - sqSides/2, tile.y - sqSides/2));
+  ptArr.push(createVector(tile.x + sqSides/2, tile.y - sqSides/2));
+  ptArr.push(createVector(tile.x + sqSides/2, tile.y + sqSides/2));
+  ptArr.push(createVector(tile.x - sqSides/2, tile.y + sqSides/2));
+  return ptArr;
+}
+
 
 function scanBlockers(origin, target){
   let top = int(min(origin.y, target.y)/sqSides);
@@ -139,18 +165,20 @@ normalAxis.set(B.y - A.y, -(B.x - A.x));
 let tMax = -Infinity, tMin = Infinity;
 // Find B-A projection on the normal axis
 let lineProj = A.dot(normalAxis);
-// List all the points from the block
+// Get all the vertices from the block
 let blockerPts = [];
-blockerPts.push(createVector(blocker.loc.x - sqSides/2, blocker.loc.y - sqSides/2));
-blockerPts.push(createVector(blocker.loc.x + sqSides/2, blocker.loc.y - sqSides/2));
-blockerPts.push(createVector(blocker.loc.x + sqSides/2, blocker.loc.y + sqSides/2));
-blockerPts.push(createVector(blocker.loc.x - sqSides/2, blocker.loc.y + sqSides/2));
+blockerPts = getPoints(blocker.loc);
 // Measure the projection of the block on the normal
 for(let i = 0; i < blockerPts.length; i++){
   let t = normalAxis.dot(blockerPts[i]);
   tMax = max(tMax, t);
   tMin = min(tMin, t);
 }
-
+if(!(lineProj >= tMin && lineProj <= tMax)) {
+  print("clear");
+  print(ptA);
+  print( ptB );
+  print(blocker.pos);
+}
 return !(lineProj >= tMin && lineProj <= tMax);
 }

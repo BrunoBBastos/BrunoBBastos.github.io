@@ -70,8 +70,8 @@ function setupLevel(){
 }
 
 function setupPlayers(){
-  player = new Player(3, 5);
-  enemy = new Enemy(6, 8);
+  player = new Player(4, 3);
+  enemy = new Enemy(6, 3);
   actives.push(player);
   actives.push(enemy);
   mode++;
