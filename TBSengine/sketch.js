@@ -58,10 +58,10 @@ function setupLevel(){
   setupLayouts();
   loadLayout(JpLayout);
 
-  buttons.push(new UIButton(50, 16 * sqSides + 50, "Confirm"));
-  buttons.push(new UIButton(150, 16 * sqSides + 50, "End Turn"));
-  buttons.push(new UIButton(250, 16 * sqSides + 50, "Whatever"));
-  buttons.push(new UIButton(350, 16 * sqSides + 50, "Paulo Ricardo"));
+  buttons.push(new UIButton(50, 16 * sqSides + 50, "Move", emptyTemplate));
+  buttons.push(new UIButton(150, 16 * sqSides + 50, "Attack", emptyTemplate));
+  buttons.push(new UIButton(250, 16 * sqSides + 50, "End Turn", endTurn));
+  buttons.push(new UIButton(350, 16 * sqSides + 50, "Paulo Ricardo", emptyTemplate));
 
 
   currentTurn = 1;
@@ -70,8 +70,8 @@ function setupLevel(){
 }
 
 function setupPlayers(){
-  player = new Player(4, 3);
-  enemy = new Enemy(10, 10);
+  player = new Player(3, 5);
+  enemy = new Enemy(6, 8);
   actives.push(player);
   actives.push(enemy);
   mode++;

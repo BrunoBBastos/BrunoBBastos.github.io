@@ -62,11 +62,12 @@ function mouseClicked(){
 }
 
 class UIButton{
-	constructor(x, y, txt){
+	constructor(x, y, txt, foo){
 		this.loc = createVector(x, y);
 		this.txt = txt;
 		this.w = 100;
 		this.h = 50;
+		this.foo = foo;
 	}
 
 	show(){
@@ -83,8 +84,12 @@ class UIButton{
 	checkClick(x, y){
 		if(x > this.loc.x - this.w / 2 && x < this.loc.x + this.w / 2){
 			if(y > this.loc.y - this.h / 2 && y < this.loc.y + this.h / 2){
-				print(this.txt);
+				this.foo();
 			}
 		}
 	}
+}
+
+function emptyTemplate(){
+	return;
 }
