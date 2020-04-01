@@ -3,6 +3,8 @@ let player, enemy;
 let popUps = [];
 let grid = [];
 let buttons = [];
+let cards = [];
+let parts = [];
 let mode = 0;
 let actives = []; // array to hold active pieces on the table
 let currentTurn;
@@ -10,29 +12,34 @@ let currentActive;
 
 let rows, cols, sqSides = 30;
 
+function preload(){
+
+}
+
 function setup() {
-  createCanvas(801, 801);
+  createCanvas(800, 600);
   
   rectMode(CENTER);
   ellipseMode(CENTER);
+  loadCards();
 }
 
 function draw() {
   manageMode();
-  
 }
 
 function manageMode(){
   switch(mode){
     case 0:
-    mode++;
+    intro();
     break;
 
     case 1:
-    setupLevel();
+    menu();
     break;
 
     case 2:
+    setupLevel();
     setupPlayers();
     break;
 
@@ -56,27 +63,23 @@ function setupLevel(){
   }
 
   setupLayouts();
-  loadLayout(JpLayout);
+  loadLayout(bigLayout);
 
-
-
-  buttons.push(new UIButton(cols * sqSides * (1/6), 16 * sqSides + 50, "Move", emptyTemplate));
-  buttons.push(new UIButton(cols * sqSides * (1/2), 16 * sqSides + 50, "Attack", emptyTemplate));
-  buttons.push(new UIButton(cols * sqSides * (5/6), 16 * sqSides + 50, "End Turn", endTurn));
-
+  buttons.push(new UIButton(cols * sqSides * (1/6), rows * sqSides + 50, "+", emptyTemplate));
+  buttons.push(new UIButton(cols * sqSides * (1/2), rows * sqSides + 50, "-", emptyTemplate));
+  buttons.push(new UIButton(cols * sqSides * (5/6), rows * sqSides + 50, "End Round", endTurn));
 
   currentTurn = 1;
   currentActive = 0;
-  mode++;
 }
 
 function setupPlayers(){
-  player = new Player(4, 3);
+  player = new Player(5, 5);
   actives.push(player);
-  for(let i = 0; i < 2; i++){
-  enemy = new Enemy(6 + i, 13);
-  actives.push(enemy);
-  } 
+  // for(let i = 0; i < 2; i++){
+  // enemy = new Enemy(6 + i, 13);
+  // actives.push(enemy);
+  // } 
   mode++;
   player.setupTurn();
 }
@@ -98,6 +101,8 @@ function runMatch(){
  for(b of buttons){
   b.show();
 }
+
+mouseHover();
 
 }
 

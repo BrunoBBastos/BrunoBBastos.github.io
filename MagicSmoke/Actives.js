@@ -2,7 +2,7 @@ class Active{
   constructor(x, y){
     this.pos = createVector(x, y);
     this.loc = createVector(this.pos.x * sqSides + sqSides/2, this.pos.y * sqSides + sqSides/2);
-    // this.hasMoves = false;
+    
     this.lifes = 5;
     this.dmg = 2;
     this.atkRange = 9;
@@ -14,12 +14,36 @@ class Active{
     this.availableMoves = [];
     this.availableTargets = [];
     this.category = "Generic";
+    this.robot = testRLoaders();
+    this.deck = new Deck(this.robot);
+    this.deck.shuffleActiveDeck();
+    this.cardUI = new UICardBox(cols * sqSides + 100, rows * sqSides / 2, "----- CARDS -----", this.deck.hand);
   }
 
   show(){
+    push();
     stroke(0);
     fill(this.col);
-    circle(this.loc.x, this.loc.y, 20);    
+    circle(this.loc.x, this.loc.y, 20);
+    pop();
+    this.cardUI.show();
+   // this.showDeck();  
+  }
+
+  showDeck(){
+    push();
+    textSize(20);
+    textAlign(CENTER, CENTER);
+    text("----- CARDS -----", cols * sqSides + 100, rows * sqSides / 2);
+
+    textAlign(CENTER, CENTER);
+    textSize(15);
+    text(this.deck.hand[0].cardName, cols * sqSides + 100, rows * sqSides / 2 + 30);
+    text(this.deck.hand[1].cardName, cols * sqSides + 100, rows * sqSides / 2+ 60);
+    text(this.deck.hand[2].cardName, cols * sqSides + 100, rows * sqSides / 2 + 90);
+    text(this.deck.hand[3].cardName, cols * sqSides + 100, rows * sqSides / 2 + 120);
+    text(this.deck.hand[4].cardName, cols * sqSides + 100, rows * sqSides / 2 + 150);
+    pop();
   }
 
   move(j, i){
@@ -30,7 +54,6 @@ class Active{
     grid[i][j].isOccupied = true;
     this.moves = this.availableMoves[i][j];
     this.update();
-    
   }
 
   update(){
@@ -39,13 +62,18 @@ class Active{
     this.loc.set(this.pos.x * sqSides + sqSides/2, this.pos.y * sqSides + sqSides/2);
     this.availableMoves = findAvailableTiles(this);
     this.availableTargets = this.scanTargets();
+    this.cardUI.update(this.deck.hand);
   }
 
   setupTurn(){
-    // this.hasMoves = true;
     this.moves = this.baseMoves;
     this.actionPoints = this.baseAP;
     this.update();
+    this.deck.drawHand();
+  }
+
+  loadDeck(){
+
   }
 
   turn(){
