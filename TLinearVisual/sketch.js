@@ -2,7 +2,7 @@ let points = [];
 let particles = [];
 let planeSize = 10; // gera um plano de (-n a n)^2 elementos
 let center;
-let resolution = 45; // resolução da escala
+let resolution = 35; // resolução da escala
 let currentMatrix;
 let M = [];
 M = [[-1, 3], [2, 0]];
@@ -15,7 +15,9 @@ function setup() {
  	currentMatrix = M;
 	
 	particlesSetup(points, particles);
- 	alert("clique para visualizar a matriz\n" + M[0] +"\n" + M[1]);
+ 	alert("clique para visualizar a transformação\n"
+		 + M[0] +"\n"
+		 + M[1]);
 }
 
 function draw() {
@@ -181,4 +183,11 @@ function applyTransform(M, ptsArray, partclsArray){
 
 function mouseClicked(){
 	applyTransform(currentMatrix, points, particles);
+}
+
+function mouseWheel(event) {
+  let pulse = event.delta / -100;
+  resolution += 2 * pulse;
+  resolution = constrain(resolution, 10, 70);
+  return false;
 }
