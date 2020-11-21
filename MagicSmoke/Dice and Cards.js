@@ -49,7 +49,7 @@ class Deck{
 
 }
 
-function loadCards(){
+function loadCards(){ // Provisory cards, do write a JSON cards file
 	cards.push(new Card("Move!", "Movement", 1, "Move, dammit!"));
 	cards.push(new Card("Grind!", "Attack", 1, "Attacks the enemy."));
 	cards.push(new Card("Crush!", "Attack", 1, "Attacks the enemy."));
