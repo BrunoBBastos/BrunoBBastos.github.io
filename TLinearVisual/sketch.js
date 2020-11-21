@@ -1,13 +1,12 @@
 let points = [];
 let particles = [];
-let planeSize = 10; // gera um plano de n*n elementos
+let planeSize = 10; // gera um plano de (-n a n)^2 elementos
 let center;
-let unitSize = 45;
+let resolution = 45; // resolução da escala
 
 let M = [];
-M = [[-1, 4], [-2, 5]];
+M = [[-1, 3], [2, 0]];
 // M = [[0, 1], [1, 0]];
-
 
 
 function setup() {
@@ -36,11 +35,11 @@ function drawAxis(scale){
 	strokeWeight(1);
 	for(let i = -10; i < 10; i++){
 		if(i==0)continue;
-		text(i * scale, -15, -i * unitSize);
+		text(i * scale, -15, -i * resolution);
 	}
 	for(let i = -10; i < 10; i++){
 		if(i==0)continue;
-		text(i * scale, i * unitSize, 15);
+		text(i * scale, i * resolution, 15);
 	}
 	strokeWeight(3);
 	line(-width/2, 0, width/2, 0);
@@ -57,7 +56,7 @@ function drawPoints(set){
 	for(let i = 0; i < set.length; i++){
 		if(i == 258)stroke('red');
 		else stroke('cyan');
-		point(set[i].x * unitSize, set[i].y * -unitSize);
+		point(set[i].x * resolution, set[i].y * -resolution);
 	}
 	pop();
 }
@@ -145,7 +144,7 @@ class Particle{
 		translate(center);
 		stroke(this.col);
 		strokeWeight(4);
-		point(this.pos.x * unitSize, this.pos.y * -unitSize);
+		point(this.pos.x * resolution, this.pos.y * -resolution);
 		pop(0);
 	}
 
