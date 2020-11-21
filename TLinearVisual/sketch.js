@@ -3,7 +3,7 @@ let particles = [];
 let planeSize = 10; // gera um plano de (-n a n)^2 elementos
 let center;
 let resolution = 45; // resolução da escala
-
+let currentMatrix;
 let M = [];
 M = [[-1, 3], [2, 0]];
 // M = [[0, 1], [1, 0]];
@@ -12,9 +12,10 @@ M = [[-1, 3], [2, 0]];
 function setup() {
  	createCanvas(800, 500);
  	center = createVector(width/2, height/2);
+ 	currentMatrix = M;
 	
 	particlesSetup(points, particles);
- 	applyTransform(M, points, particles);
+ 	alert("clique para visualizar a matriz\n" + M[0] +"\n" + M[1]);
 }
 
 function draw() {
@@ -33,11 +34,11 @@ function drawAxis(scale){
 	fill(255);
 	textAlign(CENTER, CENTER);
 	strokeWeight(1);
-	for(let i = -10; i < 10; i++){
+	for(let i = -10; i <= 10; i++){
 		if(i==0)continue;
 		text(i * scale, -15, -i * resolution);
 	}
-	for(let i = -10; i < 10; i++){
+	for(let i = -10; i <= 10; i++){
 		if(i==0)continue;
 		text(i * scale, i * resolution, 15);
 	}
@@ -111,12 +112,12 @@ function matrixToVec(M){ // expandir para matrizes de formato nxm
 class Particle{
 	constructor(vec){
 		this.pos = vec;
-		this.maxSpd = .001;
-		this.vel = createVector(0, 0);
-		this.acc = createVector(0, 0);
-		this.destiny = this.pos.copy();
-		this.origin = this.pos.copy();
-		this.progress = 0;
+		this.spd = .005;
+		// this.vel = createVector(0, 0);
+		this.dir = createVector(0, 0); // direção
+		this.destiny = this.pos.copy(); // posição destino
+		this.origin = this.pos.copy(); // posição inicial antes da transformação
+		this.progress = 0; // % do caminho percorrido
 		this.col = 'magenta';
 	}
 
@@ -127,33 +128,35 @@ class Particle{
 
 	move(){
 		if(this.progress < 1){
-			this.progress += 0.01;
+			this.progress += this.spd;
 			let d = this.origin.dist(this.destiny);
-			let a = this.acc.copy();
+			let a = this.dir.copy();
 			let b = this.origin.copy();
 			a.mult(d * this.progress);
 			b.add(a);
 			this.pos.set(b);
 		}
-
-		
+		else{
+			this.origin = this.pos.copy();
+		}
 	}
 
 	show(){
 		push();
 		translate(center);
 		stroke(this.col);
-		strokeWeight(4);
+		strokeWeight(6);
 		point(this.pos.x * resolution, this.pos.y * -resolution);
 		pop(0);
 	}
 
 	moveTo(vec){
+		this.progress = 0;
 		this.destiny = vec; // armazena o destino da partícula
-		this.acc = this.destiny.copy(); // atualiza a velocidade...
+		this.dir = this.destiny.copy(); // atualiza a velocidade...
 		let p = this.pos.copy(); 
-		this.acc.sub(p); // para a direção do destino
-		this.acc.normalize(); // transforma num vetor unitário 
+		this.dir.sub(p); // para a direção do destino
+		this.dir.normalize(); // transforma num vetor unitário 
 	}
 }
 
@@ -174,4 +177,8 @@ function applyTransform(M, ptsArray, partclsArray){
  		ptsArray[i] = matrixTransform(M, ptsArray[i]);
  		partclsArray[i].moveTo(ptsArray[i]);
  	}
+}
+
+function mouseClicked(){
+	applyTransform(currentMatrix, points, particles);
 }
