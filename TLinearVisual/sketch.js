@@ -19,7 +19,7 @@ let center;
 let resolution = 35; // resolução da escala
 let currentMatrix;
 let Mat = [];
-Mat = [[-1, 3], [2, 0]];
+Mat = [[-1, 3], [2, 0]]; // Exemplo L21.5
 // Mat = [[0, -1], [-1, 0]];
 
 
@@ -54,7 +54,7 @@ function drawAxis(scale){
 	stroke(255);
 	fill(255);
 	textAlign(CENTER, CENTER);
-	strokeWeight(1);
+	textSize(10)
 	for(let i = -10; i <= 10; i++){
 		if(i==0)continue;
 		text(i * scale, -15, -i * resolution);
@@ -63,7 +63,7 @@ function drawAxis(scale){
 		if(i==0)continue;
 		text(i * scale, i * resolution, 15);
 	}
-	strokeWeight(3);
+	strokeWeight(2);
 	line(-width/2, 0, width/2, 0);
 	line(0, -height/2, 0, height/2);
 	pop();
@@ -74,7 +74,7 @@ function drawPoints(set){
 	push();
 	translate(center);
 	stroke('cyan');
-	strokeWeight(10);
+	strokeWeight(7);
 	for(let i = 0; i < set.length; i++){
 		if(i == 258)stroke('red');
 		else stroke('cyan');

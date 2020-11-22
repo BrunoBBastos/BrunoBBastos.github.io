@@ -62,9 +62,9 @@ function bhaskara(coefs){
 	return result;
 }
 
-function determinant(M){ // recebe mtx
+function determinant(M){ // recursiva para matrizes nxn
 		let det = 0;
-		if(M.length <= 2){ // Brincadeira de criança
+		if(M.length <= 2){ // caso base
 			det = M[0][0] * M[1][1] - M[0][1] * M[1][0];
 		}
 		else {
@@ -85,7 +85,7 @@ function determinant(M){ // recebe mtx
 				}
 				let signal = 1;
 				if(c & 1) signal = -1;
-				det += coeficients[c] * this.determinant(reducedMatrix) * signal;
+				det += coeficients[c] * determinant(reducedMatrix) * signal;
 			}
 		}
 		return det;
@@ -121,10 +121,12 @@ function determinant(M){ // recebe mtx
 	}
 
 	function eigenvectors(M){ // Tentando escrever uma forma base que sirva para matrizes maiores
+		// Consultar Teorema de Cayley-Hamilton
 		let lambdas = [];
 		let vecs =[];
 		lambdas = eigenvalues(M);
 		for(let i = 0 ; i < lambdas.length; i++){ // para cada lambda encontrado
+			// if(lambdas[i] isNaN) continue; // Se não for número, sair
 			let lambdaI = createIdentityMatrix(M.length); // criar uma matriz lambda * Identidade do tamanho de M
 			lambdaI = scalarMult(lambdas[i], lambdaI);
 			let MminusL = copyMatrix(M);
@@ -139,7 +141,7 @@ function determinant(M){ // recebe mtx
 	}
 
 	function copyMatrix(M){
-	// Copiar arrays multiníveis com o operador = traz todo tipo de problema 
+	// Copiar arrays multiníveis com o operador '=' traz todo tipo de problema 
 	let rows = M.length;
 	let cols = M[0].length;
 	let result = [];
