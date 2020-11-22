@@ -1,29 +1,48 @@
+/*
+Criado por Bruno B Bastos em 21/11/20
+
+Faltando:
+	Resetar página
+	User inputs (selecionar pontos, linhas, áreas, etc)
+	Entrada de matrizes
+	Autovetores e Autovalores - feito 22/11/20
+	Refactorar as funções de matrizes num objeto Matriz
+*/
+
 let points = [];
 let particles = [];
+let lines = [];
+let eigenVecs = [];
+let eigenVals = [];
 let planeSize = 10; // gera um plano de (-n a n)^2 elementos
 let center;
 let resolution = 35; // resolução da escala
 let currentMatrix;
-let M = [];
-M = [[-1, 3], [2, 0]];
-// M = [[0, 1], [1, 0]];
+let Mat = [];
+Mat = [[-1, 3], [2, 0]];
+// Mat = [[0, -1], [-1, 0]];
 
 
 function setup() {
  	createCanvas(800, 500);
  	center = createVector(width/2, height/2);
- 	currentMatrix = M;
+ 	currentMatrix = Mat;
 	
 	particlesSetup(points, particles);
  	alert("clique para visualizar a transformação\n"
-		 + M[0] +"\n"
-		 + M[1]);
+		 + currentMatrix[0] +"\n"
+		 + currentMatrix[1]);
+ 	
+ 	getEigenvectors(currentMatrix, eigenVecs, eigenVals);
+ 	console.log(eigenVals);
+ 	console.log(eigenVecs);
 }
 
 function draw() {
 	background(0);
 	drawAxis(1);
 	drawPoints(points);
+	drawEigenVecLines(eigenVecs);
   	for(p of particles){
   		p.update();
   	}
@@ -64,52 +83,6 @@ function drawPoints(set){
 	pop();
 }
 
-function matrixTransform(M, v){ // Aplica uma transformação em um vetor P5
-	let vec = vecToMatrix(v); // transforma um vetor P5 numa matriz
-	let product = matrixMult(M, vec); // multiplica a mat tranformação pelo "vetor"
-	let result = matrixToVec(product); // converte o produto de volta a um vetor P5
-	return result;
-}
-
-function matrixMult(A, B){
-	if(A[0].length != B.length) {
-		console.log("número de colunas de A deve ser igual ao de linhas de B");
-		return null; 
-	}
-	let result = [];
-	for(let i = 0; i < A.length; i++){
-		let row = [];
-		result.push(row);
-		for(let j = 0; j < B[0].length; j++){
-			let sum = 0;
-			for(let a = 0; a < A[0].length; a++){
-				sum += A[i][a] * B[a][j];
-			}
-			result[i][j] = sum;
-		}
-	}
-	return result;
-}
-
-function vecToMatrix(v){
-	if(v instanceof p5.Vector){
-		let vec = [];
-		vec[0] = [];
-		vec[1] = [];
-		vec[0].push(v.x);
-		vec[1].push(v.y);
-		return vec;
-	}
-	if(v instanceof Array){ // recebe um conjunto de vetores e transforma numa matriz
-		console.log("Ainda não fiz essa parte :(");
-		return null;
-	}
-}
-
-function matrixToVec(M){ // expandir para matrizes de formato nxm
-	let vec = createVector(M[0], M[1]);
-	return vec;
-}
 
 class Particle{
 	constructor(vec){
@@ -119,6 +92,7 @@ class Particle{
 		this.dir = createVector(0, 0); // direção
 		this.destiny = this.pos.copy(); // posição destino
 		this.origin = this.pos.copy(); // posição inicial antes da transformação
+		this.course = 0;
 		this.progress = 0; // % do caminho percorrido
 		this.col = 'magenta';
 	}
@@ -131,16 +105,20 @@ class Particle{
 	move(){
 		if(this.progress < 1){
 			this.progress += this.spd;
-			let d = this.origin.dist(this.destiny);
+			// let d = this.origin.dist(this.destiny);
 			let a = this.dir.copy();
 			let b = this.origin.copy();
-			a.mult(d * this.progress);
+			a.mult(this.course * this.progress);
 			b.add(a);
 			this.pos.set(b);
 		}
 		else{
 			this.origin = this.pos.copy();
 		}
+		/* 	Graças à propriedade T(αv) = αT(v) é possível aplicar a transformação T na posição (pos)
+			da partícula em pequenas frações (spd) resultando num movimento que preserva a
+			linearidade
+		*/
 	}
 
 	show(){
@@ -158,7 +136,8 @@ class Particle{
 		this.dir = this.destiny.copy(); // atualiza a velocidade...
 		let p = this.pos.copy(); 
 		this.dir.sub(p); // para a direção do destino
-		this.dir.normalize(); // transforma num vetor unitário 
+		this.dir.normalize(); // transforma num vetor unitário
+		this.course = this.origin.dist(this.destiny);
 	}
 }
 
@@ -188,6 +167,26 @@ function mouseClicked(){
 function mouseWheel(event) {
   let pulse = event.delta / -100;
   resolution += 2 * pulse;
-  resolution = constrain(resolution, 10, 70);
+  resolution = constrain(resolution, 10, 90);
   return false;
+}
+
+function getEigenvectors(M, vecs, vals){// a função eigenvectors(M) já chama por eigenValues, refazer isso aqui
+	vals.push(eigenvalues(M)); // Encontrei um problema pra receber o resultado aqui...
+	vecs.push(eigenvectors(M)); // saindo da função, os resultados desaparecem
+	// console.log(vecs); // Só consegui resolver com o método push()
+	// Aparentemente o array sendo passado é multinível
+}
+
+function drawEigenVecLines(vecs){
+	push();
+	translate(center);
+	stroke('cyan');
+	strokeWeight(1);
+	for(let i = 0; i < vecs[0].length; i++){ 
+	// gambiarra horrível, reformular a forma de armazenamento de variáveis
+		line(vecs[0][i].x * 10 * resolution, vecs[0][i].y * 10 * -resolution,
+			 vecs[0][i].x * -10 * resolution, vecs[0][i].y * -10 * -resolution);
+	}
+	pop()
 }
