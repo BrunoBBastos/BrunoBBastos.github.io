@@ -4,7 +4,7 @@ Criado por Bruno B Bastos em 21/11/20
 Faltando:
 	Resetar página
 	User inputs (selecionar pontos, linhas, áreas, etc)
-	Entrada de matrizes
+	Entrada de matrizes - feito 23/11/2020
 	Autovetores e Autovalores - feito 22/11/20
 	Refactorar as funções de matrizes num objeto Matriz
 */
@@ -28,12 +28,8 @@ Mat = [[0, -1], [-1, 0]];
 
 function setup() {
  	UIsetup();
-	
 	particlesSetup(points, particles);
- 	
- 	getEigenvectors(currentMatrix, eigenVecs, eigenVals);
- 	console.log(eigenVals);
- 	console.log(eigenVecs);
+ 	updateMatrix();
 }
 
 function draw() {
@@ -83,12 +79,31 @@ function drawPoints(set){
 	pop();
 }
 
+function getEigenvectors(M){// a função eigenvectors(M) já chama por eigenValues, refazer isso aqui
+	eigenVals = eigenvalues(M); // Encontrei um problema pra receber o resultado aqui
+	eigenVecs = eigenvectors(M); // saindo da função, os resultados desaparecem
+	// Só consegui resolver com o método push()
+	// Aparentemente o array sendo passado é multinível
+	// Passar o array para receber de uma terceira função aparentemente gera problemas de escopo
+	// Redundância enorme!
+}
+
+function drawEigenVecLines(vecs){
+	push();
+	translate(center);
+	stroke('cyan');
+	strokeWeight(1);
+	for(let i = 0; i < vecs.length; i++){
+		line(vecs[i].x * 100 * resolution, vecs[i].y * 100 * -resolution,
+			 vecs[i].x * -100 * resolution, vecs[i].y * -100 * -resolution);
+	}
+	pop();
+}
 
 class Particle{
 	constructor(vec){
 		this.pos = vec;
 		this.spd = .005;
-		// this.vel = createVector(0, 0);
 		this.dir = createVector(0, 0); // direção
 		this.destiny = this.pos.copy(); // posição destino
 		this.origin = this.pos.copy(); // posição inicial antes da transformação
@@ -103,6 +118,11 @@ class Particle{
 	}
 
 	move(){
+		/* 	
+		Graças à propriedade T(αv) = αT(v) é possível aplicar a transformação T na posição (pos)
+		da partícula em pequenas frações (spd) resultando num movimento que preserva a
+		linearidade
+		*/
 		if(this.progress < 1){
 			this.progress += this.spd;
 			// let d = this.origin.dist(this.destiny);
@@ -115,10 +135,6 @@ class Particle{
 		else{
 			this.origin = this.pos.copy();
 		}
-		/* 	Graças à propriedade T(αv) = αT(v) é possível aplicar a transformação T na posição (pos)
-			da partícula em pequenas frações (spd) resultando num movimento que preserva a
-			linearidade
-		*/
 	}
 
 	show(){
@@ -153,27 +169,6 @@ function particlesSetup(ptsArray, partclsArray){
  	}
 }
 
-function getEigenvectors(M){// a função eigenvectors(M) já chama por eigenValues, refazer isso aqui
-	eigenVals = eigenvalues(M); // Encontrei um problema pra receber o resultado aqui
-	eigenVecs = eigenvectors(M); // saindo da função, os resultados desaparecem
-	// Só consegui resolver com o método push()
-	// Aparentemente o array sendo passado é multinível
-	// Passar o array para receber de uma terceira função aparentemente gera problemas de escopo
-	// Redundância enorme!
-}
-
-function drawEigenVecLines(vecs){
-	push();
-	translate(center);
-	stroke('cyan');
-	strokeWeight(1);
-	for(let i = 0; i < vecs.length; i++){
-		line(vecs[i].x * 10 * resolution, vecs[i].y * 10 * -resolution,
-			 vecs[i].x * -10 * resolution, vecs[i].y * -10 * -resolution);
-	}
-	pop();
-}
-
 function UIsetup(){ // Funções de html e da interface do usuário serão a minha ruína, observe:
 	// Documentação boa pra ajudar com isso aqui:
 	// https://developer.mozilla.org/en-US/docs/Web/CSS/position
@@ -205,6 +200,9 @@ function UIsetup(){ // Funções de html e da interface do usuário serão a min
  	a10.changed(getVal10);
  	a11.changed(getVal11);
 
+ 	let button = createButton('Aplicar');
+ 	button.mousePressed(updateMatrix);
+ 	button.position(400, 0, 'relative');
  	/* 
  	Criar botão para atualizar a currentMatrix, eigencoisas,
 
@@ -213,22 +211,18 @@ function UIsetup(){ // Funções de html e da interface do usuário serão a min
 
 function getVal00(){
 	Mat[0][0] = Number(this.value());
-	currentMatrix = Mat;
 }
 
 function getVal01(){
 	Mat[0][1] = Number(this.value());
-	currentMatrix = Mat;
 }
 
 function getVal10(){
 	Mat[1][0] = Number(this.value());
-	currentMatrix = Mat;
 }
 
 function getVal11(){
 	Mat[1][1] = Number(this.value());
-	currentMatrix = Mat;
 }
 
 function applyTransform(){
@@ -238,10 +232,20 @@ function applyTransform(){
  	}
 }
 
-function updateResolution(event) {
-	// console.log(event.deltaY);
-  let pulse = event.deltaY / -100;
-  resolution += 2 * pulse;
+function updateMatrix(){
+	// getVal00();
+	// getVal01();
+	// getVal10();
+	// getVal11();
+	currentMatrix = Mat;
+	getEigenvectors(currentMatrix, eigenVecs, eigenVals);
+ 	console.log(eigenVals);
+ 	console.log(eigenVecs);
+}
+
+function updateResolution(event) { // Para eventos globais, "delta", para função de elemento, "deltaY"
+  let pulse = event.deltaY / -100; // Incrementos de 100 com sinal de acordo com a direção
+  resolution += 2 * pulse; // Expandir algoritmo para transformar em decimal ao invés de negativo
   resolution = constrain(resolution, 10, 90);
   return false;
 }
