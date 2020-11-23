@@ -200,13 +200,9 @@ function UIsetup(){ // Funções de html e da interface do usuário serão a min
  	a10.changed(getVal10);
  	a11.changed(getVal11);
 
- 	let button = createButton('Aplicar');
+ 	let button = createButton('Autovetores');
  	button.mousePressed(updateMatrix);
  	button.position(400, 0, 'relative');
- 	/* 
- 	Criar botão para atualizar a currentMatrix, eigencoisas,
-
- 	*/
 }
 
 function getVal00(){
@@ -233,10 +229,6 @@ function applyTransform(){
 }
 
 function updateMatrix(){
-	// getVal00();
-	// getVal01();
-	// getVal10();
-	// getVal11();
 	currentMatrix = Mat;
 	getEigenvectors(currentMatrix, eigenVecs, eigenVals);
  	console.log(eigenVals);
@@ -246,6 +238,6 @@ function updateMatrix(){
 function updateResolution(event) { // Para eventos globais, "delta", para função de elemento, "deltaY"
   let pulse = event.deltaY / -100; // Incrementos de 100 com sinal de acordo com a direção
   resolution += 2 * pulse; // Expandir algoritmo para transformar em decimal ao invés de negativo
-  resolution = constrain(resolution, 10, 90);
+  resolution = constrain(resolution, 10, 200);
   return false;
 }

@@ -5,7 +5,7 @@
 function matrixTransform(M, v){ // Aplica uma transformação em um vetor P5
 	let vec = vecToMatrix(v); // transforma um vetor P5 numa matriz
 	let product = matrixMult(M, vec); // multiplica a mat tranformação pelo "vetor"
-	let result = matrixToVec(product); // converte o produto de volta a um vetor P5
+	let result = matrixToVec(product, 0); // converte o produto de volta a um vetor P5
 	return result;
 }
 
@@ -44,8 +44,8 @@ function vecToMatrix(v){
 	}
 }
 
-function matrixToVec(M){ // expandir para matrizes de formato nxm
-	let vec = createVector(M[0][0], M[1][0]);
+function matrixToVec(M, j){ // expandir para matrizes de formato nxm
+	let vec = createVector(M[0][j], M[1][j]);
 	return vec;
 }
 
@@ -135,9 +135,14 @@ function determinant(M){ // recursiva para matrizes nxn
 			MminusL = addMatrix(M, 1, lambdaI, -1); // Encontrar (M - λI)
 			for(let j = 0; j < lambdas.length; j++){ // ADICIONAR: Testar se o lambda corresponde ao v
 				if(j == i) continue; // A matriz (M - λiI) vai corresponder a um autovetor diferente
-				let v = matrixToVec(MminusL);
-				// console.log(v);
-				vecs.push(v); // Como as colunas são múltiplas entre si, qqr uma deve servir
+				for(let c = 0; c < M[0].length; c++){
+					let v = matrixToVec(MminusL, c);
+					if(v.x == 0 && v.y == 0) continue; //  Autovetor tem que ser diferente de (0, 0)
+					console.log("a prox")
+					console.log(MminusL);
+					vecs.push(v); // Como as colunas são múltiplas entre si, qqr uma serve desde que não seja == 0
+					break; // (Terminar a busca se achado um autovetor válido)
+				}
 			}
 		}
 		// console.log(lambdas);
