@@ -103,7 +103,7 @@ function determinant(M){ // recursiva para matrizes nxn
 		// Hardcoded formula para M2x2,
 		// parece funcionar para outras nxn se resolvida por partes como fiz no algoritmo do det(M)
 		// Resolvendo o problema com uma M genérica
-		// encontrei que o determinante da (T - λI)
+		// encontrei que o determinante da (M - λI)
 		// tem a forma ad - aλ - dλ + λ^2 - bc
 		// (ad-bc) - λ(a + d) + λ^2
 		// det(M) - λ(tr(M)) + λ^2
@@ -116,24 +116,28 @@ function determinant(M){ // recursiva para matrizes nxn
 		return lambdas;
 	}
 
-	function cramersRule(ugh){ // Tinha que fazer a piada
+	function cramersRule(ugh){
 		
 	}
 
-	function eigenvectors(M){ // Tentando escrever uma forma base que sirva para matrizes maiores
-		// Consultar Teorema de Cayley-Hamilton
+	function eigenvectors(M){
+		// Segundo o Teorema de Cayley-Hamilton
+		// (M - λ1I)(M - λ2I) = (M - λ2I)(M - λ1I) = 0
+		// (M - λ1I) é formado por colunas de autovetores correspondentes a λ2 e vice e versa. Pesquisar o pq. 
 		let lambdas = [];
 		let vecs =[];
 		lambdas = eigenvalues(M);
-		for(let i = 0 ; i < lambdas.length; i++){ // para cada lambda encontrado
+		for(let i = 0 ; i < lambdas.length; i++){ // Para cada lambda encontrado...
 			// if(lambdas[i] isNaN) continue; // Se não for número, sair
-			let lambdaI = createIdentityMatrix(M.length); // criar uma matriz lambda * Identidade do tamanho de M
+			let lambdaI = createIdentityMatrix(M.length); // ...criar uma matriz lambda * Identidade do tamanho de M
 			lambdaI = scalarMult(lambdas[i], lambdaI);
 			let MminusL = copyMatrix(M);
 			MminusL = addMatrix(M, 1, lambdaI, -1); // Encontrar (M - λI)
 			for(let j = 0; j < lambdas.length; j++){ // ADICIONAR: Testar se o lambda corresponde ao v
 				if(j == i) continue; // A matriz (M - λiI) vai corresponder a um autovetor diferente
-				vecs.push(matrixToVec(MminusL)); // Como as colunas são múltiplas entre si, qqr uma deve servir
+				let v = matrixToVec(MminusL);
+				// console.log(v);
+				vecs.push(v); // Como as colunas são múltiplas entre si, qqr uma deve servir
 			}
 		}
 		// console.log(lambdas);

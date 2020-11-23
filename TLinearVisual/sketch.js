@@ -14,24 +14,22 @@ let particles = [];
 let lines = [];
 let eigenVecs = [];
 let eigenVals = [];
+let inputs = [];
+
 let planeSize = 10; // gera um plano de (-n a n)^2 elementos
 let center;
-let resolution = 35; // resolução da escala
+let resolution = 20; // resolução da escala
 let currentMatrix;
+
 let Mat = [];
-Mat = [[-1, 3], [2, 0]]; // Exemplo L21.5
-// Mat = [[0, -1], [-1, 0]];
+// Mat = [[-1, 3], [2, 0]]; // Exemplo L21.5
+Mat = [[0, -1], [-1, 0]];
 
 
 function setup() {
- 	createCanvas(800, 500);
- 	center = createVector(width/2, height/2);
- 	currentMatrix = Mat;
+ 	UIsetup();
 	
 	particlesSetup(points, particles);
- 	alert("clique para visualizar a transformação\n"
-		 + currentMatrix[0] +"\n"
-		 + currentMatrix[1]);
  	
  	getEigenvectors(currentMatrix, eigenVecs, eigenVals);
  	console.log(eigenVals);
@@ -54,14 +52,16 @@ function drawAxis(scale){
 	stroke(255);
 	fill(255);
 	textAlign(CENTER, CENTER);
-	textSize(10)
-	for(let i = -10; i <= 10; i++){
-		if(i==0)continue;
-		text(i * scale, -15, -i * resolution);
-	}
-	for(let i = -10; i <= 10; i++){
-		if(i==0)continue;
-		text(i * scale, i * resolution, 15);
+	textSize(10);
+	if(resolution >= 15){
+		for(let i = -10; i <= 10; i++){
+			if(i==0)continue;
+			text(i * scale, -10, -i * resolution);
+		}
+		for(let i = -10; i <= 10; i++){
+			if(i==0)continue;
+			text(i * scale, i * resolution, 10);
+		}
 	}
 	strokeWeight(2);
 	line(-width/2, 0, width/2, 0);
@@ -153,29 +153,13 @@ function particlesSetup(ptsArray, partclsArray){
  	}
 }
 
-function applyTransform(M, ptsArray, partclsArray){
-	for(let i = 0; i < ptsArray.length; i++){
- 		ptsArray[i] = matrixTransform(M, ptsArray[i]);
- 		partclsArray[i].moveTo(ptsArray[i]);
- 	}
-}
-
-function mouseClicked(){
-	applyTransform(currentMatrix, points, particles);
-}
-
-function mouseWheel(event) {
-  let pulse = event.delta / -100;
-  resolution += 2 * pulse;
-  resolution = constrain(resolution, 10, 90);
-  return false;
-}
-
-function getEigenvectors(M, vecs, vals){// a função eigenvectors(M) já chama por eigenValues, refazer isso aqui
-	vals.push(eigenvalues(M)); // Encontrei um problema pra receber o resultado aqui...
-	vecs.push(eigenvectors(M)); // saindo da função, os resultados desaparecem
-	// console.log(vecs); // Só consegui resolver com o método push()
+function getEigenvectors(M){// a função eigenvectors(M) já chama por eigenValues, refazer isso aqui
+	eigenVals = eigenvalues(M); // Encontrei um problema pra receber o resultado aqui
+	eigenVecs = eigenvectors(M); // saindo da função, os resultados desaparecem
+	// Só consegui resolver com o método push()
 	// Aparentemente o array sendo passado é multinível
+	// Passar o array para receber de uma terceira função aparentemente gera problemas de escopo
+	// Redundância enorme!
 }
 
 function drawEigenVecLines(vecs){
@@ -183,10 +167,81 @@ function drawEigenVecLines(vecs){
 	translate(center);
 	stroke('cyan');
 	strokeWeight(1);
-	for(let i = 0; i < vecs[0].length; i++){ 
-	// gambiarra horrível, reformular a forma de armazenamento de variáveis
-		line(vecs[0][i].x * 10 * resolution, vecs[0][i].y * 10 * -resolution,
-			 vecs[0][i].x * -10 * resolution, vecs[0][i].y * -10 * -resolution);
+	for(let i = 0; i < vecs.length; i++){
+		line(vecs[i].x * 10 * resolution, vecs[i].y * 10 * -resolution,
+			 vecs[i].x * -10 * resolution, vecs[i].y * -10 * -resolution);
 	}
-	pop()
+	pop();
+}
+
+function UIsetup(){ // Funções de html e da interface do usuário serão a minha ruína, observe:
+	// Documentação boa pra ajudar com isso aqui:
+	// https://developer.mozilla.org/en-US/docs/Web/CSS/position
+
+	canvas = createCanvas(800, 500);
+ 	canvas.mouseClicked(applyTransform);
+ 	canvas.mouseWheel(updateResolution);
+
+ 	center = createVector(width/2, height/2);
+ 	currentMatrix = Mat;
+
+ 	let title = createP("Matriz da transformação:");
+ 	title.position(320, 0, 'relative');
+ 	let a00 = createInput(String(currentMatrix[0][0]));
+ 	a00.size(20, 20);
+ 	a00.position(360, 0, 'relative');
+ 	let a01 = createInput(String(currentMatrix[0][1]));
+ 	a01.size(20, 20);
+ 	a01.position(380, 0, 'relative');
+ 	let a10 = createInput(String(currentMatrix[1][0]));
+ 	a10.size(20, 20);
+ 	a10.position(305, 40, 'relative');
+ 	let a11 = createInput(String(currentMatrix[1][1]));
+ 	a11.size(20, 20);
+ 	a11.position(325, 40, 'relative');
+
+ 	a00.changed(getVal00);
+ 	a01.changed(getVal01);
+ 	a10.changed(getVal10);
+ 	a11.changed(getVal11);
+
+ 	/* 
+ 	Criar botão para atualizar a currentMatrix, eigencoisas,
+
+ 	*/
+}
+
+function getVal00(){
+	Mat[0][0] = Number(this.value());
+	currentMatrix = Mat;
+}
+
+function getVal01(){
+	Mat[0][1] = Number(this.value());
+	currentMatrix = Mat;
+}
+
+function getVal10(){
+	Mat[1][0] = Number(this.value());
+	currentMatrix = Mat;
+}
+
+function getVal11(){
+	Mat[1][1] = Number(this.value());
+	currentMatrix = Mat;
+}
+
+function applyTransform(){
+	for(let i = 0; i < points.length; i++){
+ 		points[i] = matrixTransform(currentMatrix, points[i]);
+ 		particles[i].moveTo(points[i]);
+ 	}
+}
+
+function updateResolution(event) {
+	// console.log(event.deltaY);
+  let pulse = event.deltaY / -100;
+  resolution += 2 * pulse;
+  resolution = constrain(resolution, 10, 90);
+  return false;
 }
