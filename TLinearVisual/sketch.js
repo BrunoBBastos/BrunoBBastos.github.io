@@ -190,17 +190,17 @@ function UIsetup(){ // Funções de html e da interface do usuário serão a min
  	a11.size(20, 20);
  	a11.position(325, 40, 'relative');
 
- 	a00.changed(getVal00);
- 	a01.changed(getVal01);
- 	a10.changed(getVal10);
- 	a11.changed(getVal11);
+ 	a00.input(getVal00);
+ 	a01.input(getVal01);
+ 	a10.input(getVal10);
+ 	a11.input(getVal11);
 
  	let button = createButton('Autovetores');
  	button.mousePressed(updateMatrix);
  	button.position(400, 0, 'relative');
 }
 
-function getVal00(){
+function getVal00(){ // Só deve ser acessada pela função do botão
 	Mat[0][0] = Number(this.value());
 }
 

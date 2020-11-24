@@ -71,7 +71,7 @@ class Matrix{
 				}
 				let signal = 1;
 				if(c & 1) signal = -1;
-				det += coeficients[c] * determinant(reducedMatrix) * signal;
+				det += coeficients[c] * this.determinant(reducedMatrix) * signal;
 			}
 		}
 		return det;
