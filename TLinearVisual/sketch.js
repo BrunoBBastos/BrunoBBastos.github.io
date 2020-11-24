@@ -34,7 +34,6 @@ function setup() {
 function draw() {
 	background(0);
 	drawAxis(1);
-	// drawPoints(points); ///////// irrelevante
 	drawEigenvectors(currentMatrix);
   	for(p of particles){
   		p.update();
@@ -64,29 +63,6 @@ function drawAxis(scale){
 	pop();
 }
 
-function drawPoints(set){
-	return;
-	push();
-	translate(center);
-	stroke('cyan');
-	strokeWeight(7);
-	for(let i = 0; i < set.length; i++){
-		if(i == 258)stroke('red');
-		else stroke('cyan');
-		point(set[i].x * resolution, set[i].y * -resolution);
-	}
-	pop();
-}
-
-// function getEigenvectors(M){// a função eigenvectors(M) já chama por eigenValues, refazer isso aqui
-// 	eigenVals = eigenvalues(M); // Encontrei um problema pra receber o resultado aqui
-// 	eigenVecs = eigenvectors(M); // saindo da função, os resultados desaparecem
-// 	// Só consegui resolver com o método push()
-// 	// Aparentemente o array sendo passado é multinível
-// 	// Passar o array para receber de uma terceira função aparentemente gera problemas de escopo
-// 	// Redundância enorme!
-// }
-
 function drawEigenvectors(M){
 	push();
 	translate(center);
@@ -95,9 +71,7 @@ function drawEigenvectors(M){
 	let r = resolution * 100;
 	for(let i = 0; i < M.eigenvectors.length; i++){
 		line(M.eigenvectors[i].x * r, M.eigenvectors[i].y * (-r),
-			 M.eigenvectors[i].x * -(r), M.eigenvectors[i].x * r);
-		// line(vecs[i].x * 100 * resolution, vecs[i].y * 100 * -resolution,
-		// 	 vecs[i].x * -100 * resolution, vecs[i].y * -100 * -resolution);
+			 M.eigenvectors[i].x * -(r), M.eigenvectors[i].y * r);
 	}
 	pop();
 }
@@ -193,6 +167,7 @@ function UIsetup(){ // Funções de html e da interface do usuário serão a min
 
 	// Documentação boa pra ajudar com isso aqui:
 	// https://developer.mozilla.org/en-US/docs/Web/CSS/position
+	// Colocar tudo em posição absoluta
 	canvas = createCanvas(800, 500);
  	canvas.mouseClicked(applyTransform);
  	canvas.mouseWheel(updateResolution);
@@ -240,3 +215,18 @@ function getVal10(){
 function getVal11(){
 	Mat[1][1] = Number(this.value());
 }
+
+
+// function drawPoints(set){
+// 	return;
+// 	push();
+// 	translate(center);
+// 	stroke('cyan');
+// 	strokeWeight(7);
+// 	for(let i = 0; i < set.length; i++){
+// 		if(i == 258)stroke('red');
+// 		else stroke('cyan');
+// 		point(set[i].x * resolution, set[i].y * -resolution);
+// 	}
+// 	pop();
+// }
