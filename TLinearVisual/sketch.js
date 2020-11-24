@@ -12,8 +12,6 @@ Faltando:
 let points = [];
 let particles = [];
 let lines = [];
-let eigenVecs = [];
-let eigenVals = [];
 let inputs = [];
 
 let planeSize = 10; // gera um plano de (-n a n)^2 elementos
@@ -23,7 +21,8 @@ let currentMatrix;
 
 let Mat = [];
 // Mat = [[-1, 3], [2, 0]]; // Exemplo L21.5
-Mat = [[0, -1], [-1, 0]];
+Mat = [[-1, 4], [-2, 5]];
+let X;
 
 
 function setup() {
@@ -35,8 +34,7 @@ function setup() {
 function draw() {
 	background(0);
 	drawAxis(1);
-	drawPoints(points);
-	drawEigenVecLines(eigenVecs);
+	drawEigenvectors(currentMatrix);
   	for(p of particles){
   		p.update();
   	}
@@ -65,37 +63,15 @@ function drawAxis(scale){
 	pop();
 }
 
-function drawPoints(set){
-	return;
-	push();
-	translate(center);
-	stroke('cyan');
-	strokeWeight(7);
-	for(let i = 0; i < set.length; i++){
-		if(i == 258)stroke('red');
-		else stroke('cyan');
-		point(set[i].x * resolution, set[i].y * -resolution);
-	}
-	pop();
-}
-
-function getEigenvectors(M){// a função eigenvectors(M) já chama por eigenValues, refazer isso aqui
-	eigenVals = eigenvalues(M); // Encontrei um problema pra receber o resultado aqui
-	eigenVecs = eigenvectors(M); // saindo da função, os resultados desaparecem
-	// Só consegui resolver com o método push()
-	// Aparentemente o array sendo passado é multinível
-	// Passar o array para receber de uma terceira função aparentemente gera problemas de escopo
-	// Redundância enorme!
-}
-
-function drawEigenVecLines(vecs){
+function drawEigenvectors(M){
 	push();
 	translate(center);
 	stroke('cyan');
 	strokeWeight(1);
-	for(let i = 0; i < vecs.length; i++){
-		line(vecs[i].x * 100 * resolution, vecs[i].y * 100 * -resolution,
-			 vecs[i].x * -100 * resolution, vecs[i].y * -100 * -resolution);
+	let r = resolution * 100;
+	for(let i = 0; i < M.eigenvectors.length; i++){
+		line(M.eigenvectors[i].x * r, M.eigenvectors[i].y * (-r),
+			 M.eigenvectors[i].x * -(r), M.eigenvectors[i].y * r);
 	}
 	pop();
 }
@@ -146,12 +122,12 @@ class Particle{
 		pop(0);
 	}
 
-	moveTo(vec){
+	sendTo(vec){ // O operador '=' só copia a ref dos vetores P5, para eles é melhor usar o método copy()
 		this.progress = 0;
-		this.destiny = vec; // armazena o destino da partícula
-		this.dir = this.destiny.copy(); // atualiza a velocidade...
+		this.destiny = vec.copy(); // armazena o destino da partícula /////////////////////////
+		this.dir = this.destiny.copy();
 		let p = this.pos.copy(); 
-		this.dir.sub(p); // para a direção do destino
+		this.dir.sub(p); // Computa a direção do destino com destino - posição
 		this.dir.normalize(); // transforma num vetor unitário
 		this.course = this.origin.dist(this.destiny);
 	}
@@ -169,29 +145,48 @@ function particlesSetup(ptsArray, partclsArray){
  	}
 }
 
+function applyTransform(){
+	for(let i = 0; i < points.length; i++){
+ 		points[i] = matrixTransform(currentMatrix, points[i]); // Definida em MATH.js
+ 		particles[i].sendTo(points[i]);
+ 	}
+}
+
+function updateResolution(event) { // Para eventos globais, "delta", para função de elemento, "deltaY"
+  let pulse = event.deltaY / -100; // Incrementos de 100 com sinal de acordo com a direção
+  resolution += 2 * pulse; // Expandir algoritmo para transformar em decimal ao invés de negativo
+  resolution = constrain(resolution, 10, 200);
+  return false;
+}
+
+function updateMatrix(){
+	currentMatrix = new Matrix(Mat, 0);
+}
+
 function UIsetup(){ // Funções de html e da interface do usuário serão a minha ruína, observe:
+
 	// Documentação boa pra ajudar com isso aqui:
 	// https://developer.mozilla.org/en-US/docs/Web/CSS/position
-
+	// Colocar tudo em posição absoluta
 	canvas = createCanvas(800, 500);
  	canvas.mouseClicked(applyTransform);
  	canvas.mouseWheel(updateResolution);
 
  	center = createVector(width/2, height/2);
- 	currentMatrix = Mat;
+ 	currentMatrix = new Matrix(Mat, 0);
 
  	let title = createP("Matriz da transformação:");
  	title.position(320, 0, 'relative');
- 	let a00 = createInput(String(currentMatrix[0][0]));
+ 	let a00 = createInput(String(currentMatrix.mtx[0][0]));
  	a00.size(20, 20);
  	a00.position(360, 0, 'relative');
- 	let a01 = createInput(String(currentMatrix[0][1]));
+ 	let a01 = createInput(String(currentMatrix.mtx[0][1]));
  	a01.size(20, 20);
  	a01.position(380, 0, 'relative');
- 	let a10 = createInput(String(currentMatrix[1][0]));
+ 	let a10 = createInput(String(currentMatrix.mtx[1][0]));
  	a10.size(20, 20);
  	a10.position(305, 40, 'relative');
- 	let a11 = createInput(String(currentMatrix[1][1]));
+ 	let a11 = createInput(String(currentMatrix.mtx[1][1]));
  	a11.size(20, 20);
  	a11.position(325, 40, 'relative');
 
@@ -221,23 +216,17 @@ function getVal11(){
 	Mat[1][1] = Number(this.value());
 }
 
-function applyTransform(){
-	for(let i = 0; i < points.length; i++){
- 		points[i] = matrixTransform(currentMatrix, points[i]);
- 		particles[i].moveTo(points[i]);
- 	}
-}
 
-function updateMatrix(){
-	currentMatrix = Mat;
-	getEigenvectors(currentMatrix, eigenVecs, eigenVals);
- 	console.log(eigenVals);
- 	console.log(eigenVecs);
-}
-
-function updateResolution(event) { // Para eventos globais, "delta", para função de elemento, "deltaY"
-  let pulse = event.deltaY / -100; // Incrementos de 100 com sinal de acordo com a direção
-  resolution += 2 * pulse; // Expandir algoritmo para transformar em decimal ao invés de negativo
-  resolution = constrain(resolution, 10, 200);
-  return false;
-}
+// function drawPoints(set){
+// 	return;
+// 	push();
+// 	translate(center);
+// 	stroke('cyan');
+// 	strokeWeight(7);
+// 	for(let i = 0; i < set.length; i++){
+// 		if(i == 258)stroke('red');
+// 		else stroke('cyan');
+// 		point(set[i].x * resolution, set[i].y * -resolution);
+// 	}
+// 	pop();
+// }
