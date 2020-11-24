@@ -216,17 +216,3 @@ function getVal11(){
 	Mat[1][1] = Number(this.value());
 }
 
-
-// function drawPoints(set){
-// 	return;
-// 	push();
-// 	translate(center);
-// 	stroke('cyan');
-// 	strokeWeight(7);
-// 	for(let i = 0; i < set.length; i++){
-// 		if(i == 258)stroke('red');
-// 		else stroke('cyan');
-// 		point(set[i].x * resolution, set[i].y * -resolution);
-// 	}
-// 	pop();
-// }
