@@ -11,19 +11,15 @@ Faltando:
 
 let points = [];
 let particles = [];
-let lines = [];
 let inputs = [];
 
-let planeSize = 10; // gera um plano de (-n a n)^2 elementos
 let center;
+let planeSize = 10; // gera um plano de (-n a n)^2 elementos
 let resolution = 20; // resolução da escala
 let currentMatrix;
 
 let Mat = [];
-// Mat = [[-1, 3], [2, 0]]; // Exemplo L21.5
 Mat = [[-1, 4], [-2, 5]];
-let X;
-
 
 function setup() {
  	UIsetup();
@@ -43,7 +39,6 @@ function draw() {
 function drawAxis(scale){
 	push();
 	translate(center);
-	stroke(255);
 	fill(255);
 	textAlign(CENTER, CENTER);
 	textSize(10);
@@ -57,6 +52,7 @@ function drawAxis(scale){
 			text(i * scale, i * resolution, 10);
 		}
 	}
+	stroke(255);
 	strokeWeight(2);
 	line(-width/2, 0, width/2, 0);
 	line(0, -height/2, 0, height/2);
@@ -78,12 +74,12 @@ function drawEigenvectors(M){
 
 class Particle{
 	constructor(vec){
-		this.pos = vec;
-		this.spd = .005;
-		this.dir = createVector(0, 0); // direção
-		this.destiny = this.pos.copy(); // posição destino
+		this.pos = vec.copy(); // Posição
+		this.spd = .006; // Velocidade durante transformação
+		this.dir = createVector(0, 0); // direção do movimento
+		this.destination = this.pos.copy(); // posição destino
 		this.origin = this.pos.copy(); // posição inicial antes da transformação
-		this.course = 0;
+		this.travelDistance = 0;
 		this.progress = 0; // % do caminho percorrido
 		this.col = 'magenta';
 	}
@@ -101,10 +97,9 @@ class Particle{
 		*/
 		if(this.progress < 1){
 			this.progress += this.spd;
-			// let d = this.origin.dist(this.destiny);
 			let a = this.dir.copy();
 			let b = this.origin.copy();
-			a.mult(this.course * this.progress);
+			a.mult(this.travelDistance * this.progress);
 			b.add(a);
 			this.pos.set(b);
 		}
@@ -124,12 +119,12 @@ class Particle{
 
 	sendTo(vec){ // O operador '=' só copia a ref dos vetores P5, para eles é melhor usar o método copy()
 		this.progress = 0;
-		this.destiny = vec.copy(); // armazena o destino da partícula /////////////////////////
-		this.dir = this.destiny.copy();
+		this.destination = vec.copy(); // armazena o destino da partícula /////////////////////////
+		this.dir = this.destination.copy();
 		let p = this.pos.copy(); 
 		this.dir.sub(p); // Computa a direção do destino com destino - posição
 		this.dir.normalize(); // transforma num vetor unitário
-		this.course = this.origin.dist(this.destiny);
+		this.travelDistance = this.origin.dist(this.destination);
 	}
 }
 
