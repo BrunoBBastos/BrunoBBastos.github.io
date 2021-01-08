@@ -25,7 +25,7 @@ function bhaskara(coefs){
 
 class Matrix{
 	constructor(M, isDisposable = true){ // Criar extensão da classe genérica para evitar problemas de recall
-		this.mtx = M;
+		this.mtx = copyMatrix(M);
 		this.rows = this.mtx.length;
 		this.cols = this.mtx[0].length;
 		if(isDisposable) return;
@@ -243,3 +243,21 @@ function createIdentityMatrix(n){
 	return result;
 }
 
+function copyMatrix(M){
+	// A utilidade dessa função é criar uma cópia de um array multinível
+	// Os métodos de cópia padrão não atendem essa necessidade
+	// Tais métodos eram fonte de bugs recorrentes neste aplicativo até
+	// o momento quando descobri que estava passando apenas uma referência
+	// para a matriz original, que podia ser modificada ou até mesmo descartada
+	// e assim, afetando diretamete a matrix que recebeu a "cópia"
+
+	let result = [];
+	for(let i = 0; i < M.length; i++){
+		let row = [];
+		for(let j = 0; j < M[i].length; j++){
+			row.push(M[i][j]);
+		}
+		result.push(row);
+	}
+	return result;
+}
