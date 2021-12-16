@@ -15,7 +15,7 @@ function sendToServer(state)
 	//criar um objeto capaz de enviar dados via requisição HTTP GET
 	const http = new XMLHttpRequest();
 	//prepara um GET passando a váriavel lux como ultimo parâmetro do link
-	http.open("GET", "https://api.thingspeak.com/update?api_key="+ KEY +" &field1 =0"+state);
+	http.open("GET", "https://api.thingspeak.com/update?api_key=" + KEY + "&field1=0"+state);
 
 	//envia um GET
 	http.send();
