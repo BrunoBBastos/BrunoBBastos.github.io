@@ -8,7 +8,7 @@ function mudar_estado()
 	const http = new XMLHttpRequest();
 	http.open("GET", "http.192.168.1.99/toggle")
 	http.send()
-	http.onload = console.log(http.responseText+""+state)	
+	http.onload = console.log("Esp:"+http.responseText+""+state)	
 	sendToServer(estado);
 
 }
