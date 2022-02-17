@@ -5,10 +5,10 @@ function mudar_estado()
 {
 	estado = Number(!estado);
 	document.getElementById("foto_lamp").src = imagens[estado];
-	const http = new XMLHttpRequest();
-	http.open("GET", "http.192.168.1.99/toggle")
+	var http = new XMLHttpRequest();
+	http.open("GET", "http://192.168.1.60/toggle")
 	http.send()
-	http.onload = console.log("Esp:"+http.responseText+""+estado)	
+	// http.onload = console.log("Esp:"+http.responseText+""+estado)	
 	// sendToServer(estado);
 
 }
