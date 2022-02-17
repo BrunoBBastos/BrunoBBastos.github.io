@@ -5,7 +5,11 @@ function mudar_estado()
 {
 	estado = Number(!estado);
 	document.getElementById("foto_lamp").src = imagens[estado];
+	const http = new XMLHttpRequest();
+	http.open("GET", "http.192.168.1.99/toggle")
+	http.send()
 	sendToServer(estado);
+
 }
 
 function sendToServer(state)
