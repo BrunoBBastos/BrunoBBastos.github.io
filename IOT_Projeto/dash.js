@@ -9,11 +9,6 @@ function mudar_estado()
 	document.getElementById("foto_lamp").src = imagens[estado];
 	//criar um objeto capaz de enviar dados via requisição HTTP GET
 	const http = new XMLHttpRequest();
-	http.open("GET", "http://192.168.1.60/toggle")
+	http.open("GET", "http://192.168.1.69/toggle")
 	http.send()
-
-	// const xhttp = new XMLHttpRequest();
-	// xhttp.open("GET", "https://api.thingspeak.com/update?api_key=" + KEY + "&field1=0"+estado);
-	// xhttp.send();
-	// xhttp.onload = console.log(http.responseText+""+estado)
 }

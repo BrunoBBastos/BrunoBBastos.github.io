@@ -1,23 +1,19 @@
-//#include <WiFiClient.h>
-#include <ESP8266HTTPClient.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
-#include <WiFiManager.h>    
+#include <WiFiManager.h>
+#include <ESP8266WiFi.h>    
+#include <ThingSpeak.h>
 
-#define RELAY 3
-
-const String VERS = "V2.3";
+const String VERS = "V2.9";
 
 WiFiServer server(80);
-WiFiClient poster;
-bool doOnce = true;
-String page;
+WiFiClient client;
+
 String header;
-String apiKey = "2DNH3A62384CBNJZ";
+unsigned long channelID = 1603036;
+char* apiKey = "2DNH3A62384CBNJZ";
 const char* host = "api.thingspeak.com";
 bool post, ready_to_post;
-
-
 
 void setup() {
   
@@ -28,23 +24,25 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   
   WiFiManager wifiManager;
-  wifiManager.setSTAStaticIPConfig(IPAddress(192,168,1,60), IPAddress(192,168,1,1), IPAddress(255,255,255,0)); // Tentar remover
   wifiManager.autoConnect("Config_ESP");
+  ThingSpeak.begin(client);
   server.begin();
 }
 
 void loop() {
   internet();
+
   if(ready_to_post)
   {
     ready_to_post = false;
-    postState(post);
+    Serial.println(writeTSData(channelID, 1, post));
   }
 }
 
 void internet()
 {
-  WiFiClient client = server.available();   // Atento a clients
+//  WiFiClient client = server.available();   // Atento a clients
+  client = server.available();   // Atento a clients
 
   if (client) {                             // Se um novo client conectar,
     String currentLine = "";                // receber dados enviados pelo client numa String
@@ -110,56 +108,8 @@ void toggleRelay()
  delay(100);
 }
 
-//https://api.thingspeak.com/update?api_key=2DNH3A62384CBNJZ&field1=01
 
-//https://api.thingspeak.com/update?api_key=2DNH3A62384CBNJZ&field1=01" // ESSE É o certo
-
-
-
-
-void postState(bool state)
-{/*
-  HTTPClient http;
-  http.begin(poster, host);
-   http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-  // Data to send with HTTP POST
-  String httpRequestData = "api_key=" + apiKey + "&field1=0" + String(state);           
-  // Send HTTP POST request
-  Serial.println(httpRequestData);
-  int httpResponseCode = http.POST(httpRequestData);
-  Serial.print("HTTP Response code is: ");
-      Serial.println(httpResponseCode);
-      http.end();
-*/
-//Inicia um client TCP para o envio dos dados
-  WiFiClient client;
-  Serial.println("Cliente conectando");
-  if (client.connect(host,80)) {
-    Serial.println("conectado");
-    String postStr = apiKey;
-           postStr +="&amp;field1=0";
-           postStr += String(state);
-//           postStr +="&amp;field2=";
-//           postStr += String(umidade);
-           postStr += "\r\n\r\n";
- 
-     client.print("POST /update HTTP/1.1\n");
-     client.print("Host: api.thingspeak.com\n");
-     client.print("Connection: close\n");
-     client.print("X-THINGSPEAKAPIKEY: "+apiKey+"\n");
-     client.print("Content-Type: application/x-www-form-urlencoded\n");
-     client.print("Content-Length: ");
-     client.print(postStr.length());
-     client.print("\n\n");
-     client.print(postStr);
- 
-     //Logs na porta serial
-     Serial.print("Relé: ");
-     Serial.print(state);
-  }
-  else
-  {
-    Serial.println("falha na conexão");
-  }
-  client.stop();
+int writeTSData(long TSChannel,unsigned int TSField,float data){
+  int  writeSuccess = ThingSpeak.writeField(TSChannel, TSField, data, apiKey); //write the data to the channel
+  return writeSuccess;
 }
